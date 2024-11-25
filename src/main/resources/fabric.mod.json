@@ -1,0 +1,44 @@
+{
+	"schemaVersion": 1,
+	"id": "scheduledtickvisulizer",
+	"version": "${version}",
+	"name": "ScheduledTickVisulizer",
+	"description": "",
+	"authors": [
+		"Ryan100c"
+	],
+	"contact": {
+		"homepage": "",
+		"sources": ""
+	},
+	"license": "CC0-1.0",
+	"icon": "assets/scheduledtickvisulizer/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"mypals.ml.ScheduledTickVisulizer"
+		],"client": [
+			"mypals.ml.ScheduledTickVisulizerClient"
+		],
+		"modmenu": [
+			"mypals.ml.config.ScheduledTickVisualizerModMenuIntegration"
+		]
+	},
+	"mixins": [
+		"scheduledtickvisulizer.mixins.json",
+		{
+			"config": "scheduledtickvisulizer.client.mixins.json",
+			"environment": "client"
+		}
+	],
+	"depends": {
+		"fabricloader": ">=0.15.11",
+		"minecraft": "~1.21",
+		"java": ">=21",
+		"fabric-api": "*"
+	},
+	"accessWidener": "scheduledtickvisulizer.accesswidener",
+	"suggests": {
+		"another-mod": "*"
+	}
+}

@@ -1,0 +1,8 @@
+autoDetectedPackages:
+- mypals.ml
+enableAutoDetect: true
+ignoreSameClassCall: null
+ignoreSamePackageCall: null
+includedPackagePrefixes: null
+includedParentClasses: null
+name: xcodemap-filter

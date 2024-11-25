@@ -1,0 +1,4 @@
+accessWidener v2 named
+accessible field net/minecraft/world/tick/WorldTickScheduler tickableTicks Ljava/util/Queue;
+accessible field net/minecraft/world/tick/ChunkTickScheduler tickQueue Ljava/util/Queue;
+accessible field net/minecraft/world/tick/WorldTickScheduler chunkTickSchedulers Lit/unimi/dsi/fastutil/longs/Long2ObjectMap;
