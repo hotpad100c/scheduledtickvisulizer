@@ -1,8 +1,11 @@
 package mypals.ml;
 
+import mypals.ml.command.CommandRegister;
 import mypals.ml.config.ScheduledTickVisualizerConfig;
 import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 
 import java.util.ArrayList;
@@ -18,6 +21,10 @@ public class ScheduledTickVisulizerClient implements ClientModInitializer {
 	@Override
 	public void onInitializeClient() {
 		UpadteSettings();
+		ClientCommandRegistrationCallback.EVENT.register((commandDispatcher, commandRegistryAccess) -> {
+			CommandRegister.register(commandDispatcher);
+		});
+
 		PayloadTypeRegistry.playS2C().register(ScheduledTickDataPayload.ID,ScheduledTickDataPayload.CODEC);
 		ClientPlayNetworking.registerGlobalReceiver(ScheduledTickDataPayload.ID, (payload, context) -> {
 			if(Objects.equals(payload.type(), "Block")){

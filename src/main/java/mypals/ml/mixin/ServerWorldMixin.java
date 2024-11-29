@@ -14,6 +14,7 @@ import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.text.Text;
 import net.minecraft.util.profiler.Profiler;
 import net.minecraft.world.MutableWorldProperties;
 import net.minecraft.world.StructureWorldAccess;
@@ -61,11 +62,11 @@ public abstract class ServerWorldMixin extends World implements StructureWorldAc
                             new SchedulTickObject(orderedTick.pos(),
                                     orderedTick.triggerTick() - time,
                                     orderedTick.priority().getIndex(), orderedTick.subTickOrder(),
-                                    "BlockTickOrdered"));
+                                    Text.translatable(orderedTick.type().getTranslationKey()).getString()));
                 }
             });
         });
-        fluidTickScheduler.chunkTickSchedulers.values().forEach(chunkTickScheduler -> {
+        fluidTickScheduler.chunkTickSchedulers.values().forEach(chunkTickScheduler ->{
             chunkTickScheduler.getQueueAsStream().forEach(orderedTick ->{
                 if(orderedTick.triggerTick() - time > 0 && !getPlayersNearBy(orderedTick.pos(),this.getGameRules().getInt(SCHEDULED_TICK_PACK_RANGE)).isEmpty()){
                     players.addAll(getPlayersNearBy(orderedTick.pos(),this.getGameRules().getInt(SCHEDULED_TICK_PACK_RANGE)));
@@ -73,7 +74,7 @@ public abstract class ServerWorldMixin extends World implements StructureWorldAc
                             new SchedulTickObject(orderedTick.pos(),
                                     orderedTick.triggerTick() - time,
                                     orderedTick.priority().getIndex(), orderedTick.subTickOrder(),
-                                    "FluidTickOrdered"));
+                                    Text.translatable(orderedTick.type().getStateManager().getDefaultState().getBlockState().getBlock().getTranslationKey()).getString()));
                 }
             });
         });

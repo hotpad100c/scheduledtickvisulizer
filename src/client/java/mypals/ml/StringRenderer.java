@@ -3,9 +3,7 @@ package mypals.ml;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
-import net.minecraft.client.render.Camera;
-import net.minecraft.client.render.RenderTickCounter;
-import net.minecraft.client.render.VertexConsumerProvider;
+import net.minecraft.client.render.*;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Colors;
 import net.minecraft.util.math.BlockPos;
@@ -16,6 +14,8 @@ import org.joml.Matrix4fStack;
 
 import java.awt.*;
 import java.util.ArrayList;
+
+import static mypals.ml.config.ScheduledTickVisualizerConfig.*;
 
 public class StringRenderer {
     public static double lastTickPosX = 0;
@@ -41,23 +41,29 @@ public class StringRenderer {
     private static VertexConsumerProvider.Immediate getVertexConsumer() {
         return MinecraftClient.getInstance().getBufferBuilders().getEntityVertexConsumers();
     }
-    public static void drawStringList(MatrixStack matrixStack, BlockPos textPos, float tickDelta, float line, ArrayList<String> texts, ArrayList<Integer> colors, float size) {
+    public static void drawStringList(MatrixStack matrices, BlockPos textPos, float tickDelta, float line, ArrayList<String> texts, ArrayList<Integer> colors, float size) {
         MinecraftClient client = MinecraftClient.getInstance();
         Camera camera = client.gameRenderer.getCamera();
-        Matrix4fStack modelViewMatrix = new Matrix4fStack(1);
-        modelViewMatrix.identity();
+        //modelViewMatrixStack modelViewMatrix = new modelViewMatrixStack(1);
+        //modelViewMatrix.identity();
 
         if (camera.isReady() && client.getEntityRenderDispatcher().gameOptions != null && client.player != null) {
-
+            matrices.push();
             float x = (float) (textPos.toCenterPos().getX() - MathHelper.lerp(tickDelta, lastTickPosX, camera.getPos().getX()));
             float y = (float) (textPos.toCenterPos().getY() - MathHelper.lerp(tickDelta, lastTickPosY, camera.getPos().getY()));
             float z = (float) (textPos.toCenterPos().getZ() - MathHelper.lerp(tickDelta, lastTickPosZ, camera.getPos().getZ()));
             lastTickPosX = camera.getPos().getX();
             lastTickPosY = camera.getPos().getY();
             lastTickPosZ = camera.getPos().getZ();
-            modelViewMatrix.translate(x, y, z);
-            modelViewMatrix.rotate(MinecraftClient.getInstance().gameRenderer.getCamera().getRotation());
-            modelViewMatrix.scale(size, -size, 1);
+
+            matrices.translate(x, y, z);
+            matrices.multiply(MinecraftClient.getInstance().gameRenderer.getCamera().getRotation());
+            matrices.scale(size, -size, 1);
+            Matrix4f modelViewMatrix = matrices.peek().getPositionMatrix();
+            Matrix4f modelViewMatrix2 = matrices.peek().getPositionMatrix();
+            //modelViewMatrix.translate(x, y, z);
+            //modelViewMatrix.rotate(MinecraftClient.getInstance().gameRenderer.getCamera().getRotation());
+            //modelViewMatrix.scale(size, -size, 1);*/
 
             TextRenderer textRenderer = MinecraftClient.getInstance().textRenderer;
 
@@ -72,15 +78,80 @@ public class StringRenderer {
             for (int i = 0; i < texts.size(); i++) {
                 float renderX = -textRenderer.getWidth(texts.get(i)) * 0.5F; // 居中
                 float renderY = renderYBase + textRenderer.getWrappedLinesHeight(texts.get(i), Integer.MAX_VALUE) * 1.25F * i;
-
-                // 渲染文本
                 VertexConsumerProvider.Immediate immediate = getVertexConsumer();
                 textRenderer.draw(
-                        texts.get(i), renderX, renderY, colors.get(i) != null? colors.get(i) : Color.white.getRGB(), false, modelViewMatrix, immediate,
-                        TextRenderer.TextLayerType.SEE_THROUGH, 0, 0xF000F0
+                        texts.get(i), renderX, renderY, colors.get(i) != null? colors.get(i) : Color.white.getRGB(), shadow,
+                        modelViewMatrix, immediate, TextRenderer.TextLayerType.SEE_THROUGH, background?backgroundColor.getRGB():0,
+                        0xF000F0
                 );
                 immediate.draw();
             }
+            matrices.pop();
+
+            // 恢复矩阵状态
+            RenderSystem.enableDepthTest();
+        }
+    }
+    public static void drawCube(MatrixStack matrices, BlockPos pos, float size, float tickDelta, Color color,float alpha) {
+        MinecraftClient client = MinecraftClient.getInstance();
+        Camera camera = client.gameRenderer.getCamera();
+        if (camera.isReady() && client.getEntityRenderDispatcher().gameOptions != null && client.player != null) {
+            matrices.push();
+            float x = (float) (pos.getX() - MathHelper.lerp(tickDelta, lastTickPosX, camera.getPos().getX()));
+            float y = (float) (pos.getY() - MathHelper.lerp(tickDelta, lastTickPosY, camera.getPos().getY()));
+            float z = (float) (pos.getZ() - MathHelper.lerp(tickDelta, lastTickPosZ, camera.getPos().getZ()));
+            lastTickPosX = camera.getPos().getX();
+            lastTickPosY = camera.getPos().getY();
+            lastTickPosZ = camera.getPos().getZ();
+
+            matrices.translate(x, y, z);
+            //matrices.scale(size, size, size);
+            Matrix4f modelViewMatrix = matrices.peek().getPositionMatrix();
+            RenderSystem.disableDepthTest();
+
+            VertexConsumerProvider.Immediate immediate = getVertexConsumer();
+            VertexConsumer vertexConsumer = immediate.getBuffer(RenderLayer.getDebugQuads());
+
+            float minOffset = -0.001F;
+            float maxOffset = 1.001F;
+
+            float red = ((color.getRGB() >> 16) & 0xFF) / 255.0f;
+            float green = ((color.getRGB() >> 8) & 0xFF) / 255.0f;
+            float blue = (color.getRGB() & 0xFF) / 255.0f;
+
+            vertexConsumer.vertex(modelViewMatrix, minOffset, maxOffset, minOffset).color(red, green, blue, alpha);
+            vertexConsumer.vertex(modelViewMatrix, maxOffset, maxOffset, minOffset).color(red, green, blue, alpha);
+            vertexConsumer.vertex(modelViewMatrix, maxOffset, maxOffset, maxOffset).color(red, green, blue, alpha);
+            vertexConsumer.vertex(modelViewMatrix, minOffset, maxOffset, maxOffset).color(red, green, blue, alpha);
+
+            vertexConsumer.vertex(modelViewMatrix, minOffset, minOffset, maxOffset).color(red, green, blue, alpha);
+            vertexConsumer.vertex(modelViewMatrix, maxOffset, minOffset, maxOffset).color(red, green, blue, alpha);
+            vertexConsumer.vertex(modelViewMatrix, maxOffset, minOffset, minOffset).color(red, green, blue, alpha);
+            vertexConsumer.vertex(modelViewMatrix, minOffset, minOffset, minOffset).color(red, green, blue, alpha);
+
+            vertexConsumer.vertex(modelViewMatrix, minOffset, maxOffset, minOffset).color(red, green, blue, alpha);
+            vertexConsumer.vertex(modelViewMatrix, minOffset, maxOffset, maxOffset).color(red, green, blue, alpha);
+            vertexConsumer.vertex(modelViewMatrix, minOffset, minOffset, maxOffset).color(red, green, blue, alpha);
+            vertexConsumer.vertex(modelViewMatrix, minOffset, minOffset, minOffset).color(red, green, blue, alpha);
+
+            vertexConsumer.vertex(modelViewMatrix, maxOffset, minOffset, minOffset).color(red, green, blue, alpha);
+            vertexConsumer.vertex(modelViewMatrix, maxOffset, minOffset, maxOffset).color(red, green, blue, alpha);
+            vertexConsumer.vertex(modelViewMatrix, maxOffset, maxOffset, maxOffset).color(red, green, blue, alpha);
+            vertexConsumer.vertex(modelViewMatrix, maxOffset, maxOffset, minOffset).color(red, green, blue, alpha);
+
+            vertexConsumer.vertex(modelViewMatrix, minOffset, minOffset, minOffset).color(red, green, blue, alpha);
+            vertexConsumer.vertex(modelViewMatrix, maxOffset, minOffset, minOffset).color(red, green, blue, alpha);
+            vertexConsumer.vertex(modelViewMatrix, maxOffset, maxOffset, minOffset).color(red, green, blue, alpha);
+            vertexConsumer.vertex(modelViewMatrix, minOffset, maxOffset, minOffset).color(red, green, blue, alpha);
+
+            vertexConsumer.vertex(modelViewMatrix, minOffset, maxOffset, maxOffset).color(red, green, blue, alpha);
+            vertexConsumer.vertex(modelViewMatrix, maxOffset, maxOffset, maxOffset).color(red, green, blue, alpha);
+            vertexConsumer.vertex(modelViewMatrix, maxOffset, minOffset, maxOffset).color(red, green, blue, alpha);
+            vertexConsumer.vertex(modelViewMatrix, minOffset, minOffset, maxOffset).color(red, green, blue, alpha);
+
+
+            immediate.draw();
+            matrices.pop();
 
             // 恢复矩阵状态
             RenderSystem.enableDepthTest();

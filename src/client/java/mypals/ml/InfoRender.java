@@ -22,17 +22,15 @@ public class InfoRender {
 
     public static List<SchedulTickObject> scheduledTicksFluid = new ArrayList<>();
     public static List<SchedulTickObject> scheduledTicksBlock = new ArrayList<>();
-
-    public static int CLEAR_TIMER = 50;
-    public static int blockTickDataClearTimer = CLEAR_TIMER;
-    public static int fluidTickDataClearTimer = CLEAR_TIMER;
+    public static int blockTickDataClearTimer = timeOutDelay;
+    public static int fluidTickDataClearTimer = timeOutDelay;
     public static void setScheduledTicksBlock(List<SchedulTickObject> scheduledTicks){
         scheduledTicksBlock = scheduledTicks;
-        blockTickDataClearTimer = CLEAR_TIMER;
+        blockTickDataClearTimer = timeOutDelay;
     }
     public static void setScheduledTicksFluid(List<SchedulTickObject> scheduledTicks){
         scheduledTicksFluid = scheduledTicks;
-        fluidTickDataClearTimer = CLEAR_TIMER;
+        fluidTickDataClearTimer = timeOutDelay;
     }
     @SuppressWarnings("ConstantConditions")
     public static void render(MatrixStack matrixStack, RenderTickCounter counter) {
@@ -41,7 +39,11 @@ public class InfoRender {
                 ArrayList<Integer> colors = new ArrayList<>();
                 ArrayList<String> text = new ArrayList<>();
                 if(showTickTypeInfo){
-                    text.add(Text.translatable("text.scheduledtick.block").getString());
+                    if(showAccurateBlockType)
+                        text.add(tick.type);
+                    else
+                        text.add(Text.translatable("text.scheduledtick.block").getString());
+
                     colors.add(blockTickColor.getRGB());
                 }
                 if(showSubOrderInfo){
@@ -56,13 +58,19 @@ public class InfoRender {
                     text.add( Text.translatable("text.scheduledtick.priority").getString() + ": " + tick.priority);
                     colors.add(priorityColor.getRGB());
                 }
-                renderTextList(matrixStack, tick.pos, counter.getTickDelta(true), 5, text, colors, 0.012F);
+                renderTextList(matrixStack, tick.pos, counter.getTickDelta(true), 5, text, colors, textSize);
+                if(showInfoBox)
+                    drawCube(matrixStack,tick.pos,0.05f,counter.getTickDelta(true),
+                        new Color(blockTickColor.getRed(),blockTickColor.getGreen(),blockTickColor.getBlue()),boxAlpha);
             }
             for (SchedulTickObject tick : scheduledTicksFluid) {
                 ArrayList<Integer> colors = new ArrayList<>();
                 ArrayList<String> text = new ArrayList<>();
                 if(showTickTypeInfo){
-                    text.add(Text.translatable("text.scheduledtick.fluid").getString());
+                    if(showAccurateBlockType)
+                        text.add(tick.type);
+                    else
+                        text.add(Text.translatable("text.scheduledtick.fluid").getString());
                     colors.add(fluidTickColor.getRGB());
                 }
                 if(showSubOrderInfo){
@@ -77,7 +85,10 @@ public class InfoRender {
                     text.add( Text.translatable("text.scheduledtick.priority").getString() + ": " + tick.priority);
                     colors.add(priorityColor.getRGB());
                 }
-                renderTextList(matrixStack, tick.pos,  counter.getTickDelta(true), 5, text, colors, 0.012F);
+                renderTextList(matrixStack, tick.pos,  counter.getTickDelta(true), 5, text, colors, textSize);
+                if(showInfoBox)
+                    drawCube(matrixStack,tick.pos,0.05f,counter.getTickDelta(true),
+                        new Color(fluidTickColor.getRed(),fluidTickColor.getGreen(),fluidTickColor.getBlue()),boxAlpha);
             }
             if(fluidTickDataClearTimer>0)
                 fluidTickDataClearTimer--;

@@ -5,7 +5,9 @@ import com.terraformersmc.modmenu.api.ModMenuApi;
 import dev.isxander.yacl3.api.*;
 import dev.isxander.yacl3.api.controller.ColorControllerBuilder;
 import dev.isxander.yacl3.api.controller.FloatSliderControllerBuilder;
+import dev.isxander.yacl3.api.controller.IntegerFieldControllerBuilder;
 import dev.isxander.yacl3.api.controller.TickBoxControllerBuilder;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.Text;
 
 import java.awt.*;
@@ -28,6 +30,30 @@ public class ScheduledTickVisualizerModMenuIntegration implements ModMenuApi {
                                         .name(Text.translatable("config.scheduledtickvisualizer.main_render"))
                                         .description(OptionDescription.of(Text.translatable("config.scheduledtickvisualizer.main_render.description")))
                                         .binding(true, () -> instance.instance().showInfo, newVal -> instance.instance().showInfo = newVal)
+                                        .controller(TickBoxControllerBuilder::create)
+                                        .build())
+                                .option(Option.<Boolean>createBuilder()
+                                        .name(Text.translatable("config.scheduledtickvisualizer.render_box"))
+                                        .description(OptionDescription.of(Text.translatable("config.scheduledtickvisualizer.render_box.description")))
+                                        .binding(true, () -> instance.instance().showInfoBox, newVal -> instance.instance().showInfoBox = newVal)
+                                        .controller(TickBoxControllerBuilder::create)
+                                        .build())
+                                .option(Option.<Boolean>createBuilder()
+                                        .name(Text.translatable("config.scheduledtickvisualizer.shadow"))
+                                        .description(OptionDescription.of(Text.translatable("config.scheduledtickvisualizer.shadow.description")))
+                                        .binding(true, () -> instance.instance().shadow, newVal -> instance.instance().shadow = newVal)
+                                        .controller(TickBoxControllerBuilder::create)
+                                        .build())
+                                .option(Option.<Boolean>createBuilder()
+                                        .name(Text.translatable("config.scheduledtickvisualizer.background"))
+                                        .description(OptionDescription.of(Text.translatable("config.scheduledtickvisualizer.background.description")))
+                                        .binding(true, () -> instance.instance().background, newVal -> instance.instance().background = newVal)
+                                        .controller(TickBoxControllerBuilder::create)
+                                        .build())
+                                .option(Option.<Boolean>createBuilder()
+                                        .name(Text.translatable("config.scheduledtickvisualizer.tick_type_render_specific"))
+                                        .description(OptionDescription.of(Text.translatable("config.scheduledtickvisualizer.tick_type_render_specific.description")))
+                                        .binding(true, () -> instance.instance().showAccurateBlockType, newVal -> instance.instance().showAccurateBlockType = newVal)
                                         .controller(TickBoxControllerBuilder::create)
                                         .build())
                                 .option(Option.<Boolean>createBuilder()
@@ -69,6 +95,14 @@ public class ScheduledTickVisualizerModMenuIntegration implements ModMenuApi {
                                                 .step(0.001F)
                                                 .formatValue(val -> Text.literal(val + "")))
                                         .build())
+                                .option(Option.<Integer>createBuilder()
+                                        .name(Text.translatable("config.scheduledtickvisualizer.data_timeout"))
+                                        .description(OptionDescription.of(Text.translatable("config.scheduledtickvisualizer.data_timeout.description")))
+                                        .binding(30, () -> instance.instance().timeOutDelay, newVal -> instance.instance().timeOutDelay = newVal)
+                                        .controller(opt -> IntegerFieldControllerBuilder.create(opt)
+                                                .range(1, 200)
+                                                .formatValue(val -> Text.literal(val + "")))
+                                        .build())
                                 .option(Option.<Color>createBuilder()
                                         .name(Text.translatable("config.scheduledtickvisualizer.block_tick_color"))
                                         .binding(Color.magenta, () -> instance.instance().blockTickColor, newVal -> instance.instance().blockTickColor = newVal)
@@ -99,6 +133,20 @@ public class ScheduledTickVisualizerModMenuIntegration implements ModMenuApi {
                                         .controller(opt -> ColorControllerBuilder.create(opt)
                                                 .allowAlpha(false))
                                         .build())
+                                .option(Option.<Color>createBuilder()
+                                        .name(Text.translatable("config.scheduledtickvisualizer.background_color"))
+                                        .binding(Color.CYAN, () -> instance.instance().backgroundColor, newVal -> instance.instance().backgroundColor = newVal)
+                                        .controller(opt -> ColorControllerBuilder.create(opt)
+                                                .allowAlpha(true))
+                                        .build())
+                                .option(Option.<Float>createBuilder()
+                                        .name(Text.translatable("config.scheduledtickvisualizer.box_alpha"))
+                                        .binding(0.015F, () -> instance.instance().boxAlpha, newVal -> instance.instance().boxAlpha = newVal)
+                                        .controller(opt -> FloatSliderControllerBuilder.create(opt)
+                                                .range(0F, 1F)
+                                                .step(0.05F)
+                                                .formatValue(val -> Text.literal(val + "")))
+                                        .build())
                                 .build())
                         .build())
                 .save(() -> {
@@ -108,4 +156,5 @@ public class ScheduledTickVisualizerModMenuIntegration implements ModMenuApi {
                 .build()
                 .generateScreen(screen);
     }
+
 }
