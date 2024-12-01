@@ -7,6 +7,7 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.gamerule.v1.GameRuleFactory;
 import net.fabricmc.fabric.api.gamerule.v1.GameRuleRegistry;
+import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.block.ShulkerBoxBlock;
 import net.minecraft.entity.EntityType;
@@ -57,6 +58,8 @@ public class ScheduledTickVisulizer implements ModInitializer {
 	public void onInitialize() {
 		ServerTickEvents.START_WORLD_TICK.register(this::OnServerTick);
 		ServerLifecycleEvents.SERVER_STARTED.register(s -> server = s);
+		// 服务器启动时需要注册
+		PayloadTypeRegistry.playS2C().register(ScheduledTickDataPayload.ID,ScheduledTickDataPayload.CODEC);
 	}
 
 	private void OnServerTick(ServerWorld serverWorld) {
