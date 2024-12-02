@@ -38,6 +38,7 @@ public class ScheduledTickVisualizer implements ModInitializer {
 	public void onInitialize() {
 		ServerTickEvents.START_WORLD_TICK.register(this::OnServerTick);
 		ServerLifecycleEvents.SERVER_STARTED.register(s -> server = s);
+		// 服务器启动时需要注册
 		PayloadTypeRegistry.playS2C().register(ScheduledTickDataPayload.ID,ScheduledTickDataPayload.CODEC);
 	}
 
