@@ -25,7 +25,7 @@ public class ScheduledTickVisulizerClient implements ClientModInitializer {
 			CommandRegister.register(commandDispatcher);
 		});
 
-		PayloadTypeRegistry.playS2C().register(ScheduledTickDataPayload.ID,ScheduledTickDataPayload.CODEC);
+//		PayloadTypeRegistry.playS2C().register(ScheduledTickDataPayload.ID,ScheduledTickDataPayload.CODEC); 客户端貌似不需要注册这个
 		ClientPlayNetworking.registerGlobalReceiver(ScheduledTickDataPayload.ID, (payload, context) -> {
 			if(Objects.equals(payload.type(), "Block")){
 				if(sortSubOrderInfo){
