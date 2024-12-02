@@ -44,6 +44,9 @@
   "config.scheduledtickvisualizer.render_box.description": "Enable to render a box on tick position.",
   "config.scheduledtickvisualizer.box_alpha": "Box Alpha",
 
+  "config.scheduledtickvisualizer.simplifyInfo": "Simplify information",
+  "config.scheduledtickvisualizer.simplifyInfo.description": "Simplify the information to:\n{SubTickOrder}@\n{TriggerTime}\n[tick.priority(if tick.priority < 0)]",
+
   "command.scheduledtickvisualizer.stv.name": "Scheduled Tick visualizer:",
   "command.scheduledtickvisualizer.render_main": "Main render -> ",
   "command.scheduledtickvisualizer.render_box": "Render box -> ",
@@ -56,5 +59,9 @@
   "command.scheduledtickvisualizer.trigger_time": "Render trigger time -> ",
   "command.scheduledtickvisualizer.priority": "Render priority -> ",
   "command.scheduledtickvisualizer.text_size": "Text size -> ",
-  "command.scheduledtickvisualizer.time_out_delay": "Time out delay -> "
+  "command.scheduledtickvisualizer.time_out_delay": "Time out delay -> ",
+
+  "key.scheduledTickVisualizer.keys": "ScheduledTickVisualizer",
+  "key.scheduledTickVisualizer.up": "ExecutionSimulate(Forward)",
+  "key.scheduledTickVisualizer.down": "ExecutionSimulate(BackWard)"
 }

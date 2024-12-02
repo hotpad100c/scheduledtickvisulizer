@@ -42,6 +42,8 @@
   "config.scheduledtickvisualizer.render_box": "渲染方框",
   "config.scheduledtickvisualizer.render_box.description": "启用后将在刻位置渲染一个方框。",
   "config.scheduledtickvisualizer.box_alpha": "方框透明度",
+  "config.scheduledtickvisualizer.simplifyInfo": "简化信息",
+  "config.scheduledtickvisualizer.simplifyInfo.description": "将信息简化为:\n{顺序}@{触发时间}[优先级(如果优先级<0)]",
 
   "command.scheduledtickvisualizer.stv.name": "计划刻可视化：",
   "command.scheduledtickvisualizer.render_main": "主渲染 -> ",
@@ -55,5 +57,8 @@
   "command.scheduledtickvisualizer.trigger_time": "渲染触发时间 -> ",
   "command.scheduledtickvisualizer.priority": "渲染优先级 -> ",
   "command.scheduledtickvisualizer.text_size": "文字大小 -> ",
-  "command.scheduledtickvisualizer.time_out_delay": "超时时间 -> "
+  "command.scheduledtickvisualizer.time_out_delay": "超时时间 -> ",
+  "key.scheduledTickVisualizer.keys": "ScheduledTickVisualizer",
+  "key.scheduledTickVisualizer.up": "执行模拟（前进）",
+  "key.scheduledTickVisualizer.down": "执行模拟（后退）"
 }

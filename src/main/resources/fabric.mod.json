@@ -1,8 +1,8 @@
 {
 	"schemaVersion": 1,
-	"id": "scheduledtickvisulizer",
+	"id": "scheduledtickvisualizer",
 	"version": "${version}",
-	"name": "ScheduledTickVisulizer",
+	"name": "ScheduledTickVisualizer",
 	"description": "",
 	"authors": [
 		"Ryan100c"
@@ -12,22 +12,22 @@
 		"sources": ""
 	},
 	"license": "CC0-1.0",
-	"icon": "assets/scheduledtickvisulizer/icon.png",
+	"icon": "assets/scheduledtickvisualizer/icon.png",
 	"environment": "*",
 	"entrypoints": {
 		"main": [
-			"mypals.ml.ScheduledTickVisulizer"
+          "mypals.ml.ScheduledTickVisualizer"
 		],"client": [
-			"mypals.ml.ScheduledTickVisulizerClient"
+			"mypals.ml.ScheduledTickVisualizerClient"
 		],
 		"modmenu": [
 			"mypals.ml.config.ScheduledTickVisualizerModMenuIntegration"
 		]
 	},
 	"mixins": [
-		"scheduledtickvisulizer.mixins.json",
+		"scheduledtickvisualizer.mixins.json",
 		{
-			"config": "scheduledtickvisulizer.client.mixins.json",
+			"config": "scheduledtickvisualizer.client.mixins.json",
 			"environment": "client"
 		}
 	],
@@ -37,7 +37,7 @@
 		"java": ">=21",
 		"fabric-api": "*"
 	},
-	"accessWidener": "scheduledtickvisulizer.accesswidener",
+	"accessWidener": "scheduledtickvisualizer.accesswidener",
 	"suggests": {
 		"another-mod": "*"
 	}

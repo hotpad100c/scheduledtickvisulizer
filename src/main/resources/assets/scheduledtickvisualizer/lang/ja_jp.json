@@ -42,6 +42,8 @@
   "config.scheduledtickvisualizer.render_box": "ボックスのレンダリング",
   "config.scheduledtickvisualizer.render_box.description": "有効にすると、ティック位置にボックスをレンダリングします。",
   "config.scheduledtickvisualizer.box_alpha": "ボックスの透明度",
+  "config.scheduledtickvisualizer.simplifyInfo": "情報を簡略化",
+  "config.scheduledtickvisualizer.simplifyInfo.description": "情報を次の形式に簡略化:\n{SubTickOrder}@{TriggerTime}[tick.priority(tick.priority < 0 の場合)]",
 
   "command.scheduledtickvisualizer.stv.name": "スケジュールティックの可視化：",
   "command.scheduledtickvisualizer.render_main": "メインレンダリング -> ",

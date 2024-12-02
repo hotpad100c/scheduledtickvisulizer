@@ -42,6 +42,8 @@
   "config.scheduledtickvisualizer.render_box": "渲染方框",
   "config.scheduledtickvisualizer.render_box.description": "啟用後會在刻位置渲染一個方框。",
   "config.scheduledtickvisualizer.box_alpha": "方框透明度",
+  "config.scheduledtickvisualizer.simplifyInfo": "簡化資訊",
+  "config.scheduledtickvisualizer.simplifyInfo.description": "將資訊簡化為:\n{顺序}@{触发时间}[优先级(如果优先级<0)]",
 
   "command.scheduledtickvisualizer.stv.name": "計畫刻視覺化：",
   "command.scheduledtickvisualizer.render_main": "主渲染 -> ",

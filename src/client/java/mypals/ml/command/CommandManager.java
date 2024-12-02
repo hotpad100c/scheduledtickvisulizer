@@ -4,7 +4,7 @@ import mypals.ml.config.ScheduledTickVisualizerConfig;
 
 import java.lang.reflect.Field;
 
-import static mypals.ml.ScheduledTickVisulizerClient.UpadteSettings;
+import static mypals.ml.ScheduledTickVisualizerClient.UpadteSettings;
 
 public class CommandManager {
     public static void setStaticBooleanField(String fieldName, boolean flag) {

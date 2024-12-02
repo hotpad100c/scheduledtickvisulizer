@@ -4,21 +4,22 @@ import com.google.gson.GsonBuilder;
 import dev.isxander.yacl3.config.v2.api.ConfigClassHandler;
 import dev.isxander.yacl3.config.v2.api.SerialEntry;
 import dev.isxander.yacl3.config.v2.api.serializer.GsonConfigSerializerBuilder;
-import mypals.ml.ScheduledTickVisulizer;
+import mypals.ml.ScheduledTickVisualizer;
 import net.fabricmc.loader.api.FabricLoader;
 
 import java.awt.*;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 public class ScheduledTickVisualizerConfig {
     public static ConfigClassHandler<ScheduledTickVisualizerConfig> CONFIG_HANDLER = ConfigClassHandler.createBuilder(ScheduledTickVisualizerConfig.class)
-            .id(ScheduledTickVisulizer.id("config"))
+            .id(ScheduledTickVisualizer.id("config"))
             .serializer(config -> GsonConfigSerializerBuilder.create(config)
                     .setPath(FabricLoader.getInstance().getConfigDir().resolve("ScheduledTickVisualizer.json5"))
                     .appendGsonBuilder(GsonBuilder::setPrettyPrinting)
                     .setJson5(true)
                     .build())
             .build();
+    @SerialEntry
+    public static boolean simplify = false;
     @SerialEntry
     public static boolean showInfo = false;
     @SerialEntry

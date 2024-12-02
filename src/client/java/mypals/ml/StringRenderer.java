@@ -60,10 +60,6 @@ public class StringRenderer {
             matrices.multiply(MinecraftClient.getInstance().gameRenderer.getCamera().getRotation());
             matrices.scale(size, -size, 1);
             Matrix4f modelViewMatrix = matrices.peek().getPositionMatrix();
-            Matrix4f modelViewMatrix2 = matrices.peek().getPositionMatrix();
-            //modelViewMatrix.translate(x, y, z);
-            //modelViewMatrix.rotate(MinecraftClient.getInstance().gameRenderer.getCamera().getRotation());
-            //modelViewMatrix.scale(size, -size, 1);*/
 
             TextRenderer textRenderer = MinecraftClient.getInstance().textRenderer;
 
@@ -112,8 +108,8 @@ public class StringRenderer {
             VertexConsumerProvider.Immediate immediate = getVertexConsumer();
             VertexConsumer vertexConsumer = immediate.getBuffer(RenderLayer.getDebugQuads());
 
-            float minOffset = -0.001F;
-            float maxOffset = 1.001F;
+            float minOffset = -0.001F - size;
+            float maxOffset = 1.001F + size;
 
             float red = ((color.getRGB() >> 16) & 0xFF) / 255.0f;
             float green = ((color.getRGB() >> 8) & 0xFF) / 255.0f;

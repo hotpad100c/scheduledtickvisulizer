@@ -2,13 +2,11 @@ package mypals.ml.mixin;
 
 import mypals.ml.SchedulTickObject;
 import mypals.ml.ScheduledTickDataPayload;
-import mypals.ml.ScheduledTickVisulizer;
+import mypals.ml.ScheduledTickVisualizer;
 import net.fabricmc.fabric.api.attachment.v1.AttachmentTarget;
-import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.block.Block;
 import net.minecraft.fluid.Fluid;
-import net.minecraft.network.PacketByteBuf;
 import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.entry.RegistryEntry;
@@ -30,12 +28,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 
-import static mypals.ml.ScheduledTickVisulizer.SCHEDULED_TICK_PACK_RANGE;
-import static mypals.ml.ScheduledTickVisulizer.getPlayersNearBy;
+import static mypals.ml.ScheduledTickVisualizer.SCHEDULED_TICK_PACK_RANGE;
+import static mypals.ml.ScheduledTickVisualizer.getPlayersNearBy;
 
 @Mixin(ServerWorld.class)
 public abstract class ServerWorldMixin extends World implements StructureWorldAccess, AttachmentTarget {
@@ -78,7 +75,7 @@ public abstract class ServerWorldMixin extends World implements StructureWorldAc
                 }
             });
         });
-        if(ScheduledTickVisulizer.server != null){
+        if(ScheduledTickVisualizer.server != null){
             for(ServerPlayerEntity player : players){
                 ServerPlayNetworking.send(player,new ScheduledTickDataPayload(orderedBlockTicks,"Block"));
                 ServerPlayNetworking.send(player,new ScheduledTickDataPayload(orderedFluidTicks,"Fluid"));

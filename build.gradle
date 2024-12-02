@@ -13,9 +13,9 @@ base {
 
 loom {
 	splitEnvironmentSourceSets()
-	accessWidenerPath = file("src/main/resources/scheduledtickvisulizer.accesswidener")
+	accessWidenerPath = file("src/main/resources/scheduledtickvisualizer.accesswidener")
 	mods {
-		"scheduledtickvisulizer" {
+		"scheduledtickvisualizer" {
 			sourceSet sourceSets.main
 			sourceSet sourceSets.client
 		}

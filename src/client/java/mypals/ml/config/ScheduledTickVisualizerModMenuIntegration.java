@@ -7,12 +7,11 @@ import dev.isxander.yacl3.api.controller.ColorControllerBuilder;
 import dev.isxander.yacl3.api.controller.FloatSliderControllerBuilder;
 import dev.isxander.yacl3.api.controller.IntegerFieldControllerBuilder;
 import dev.isxander.yacl3.api.controller.TickBoxControllerBuilder;
-import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.Text;
 
 import java.awt.*;
 
-import static mypals.ml.ScheduledTickVisulizerClient.UpadteSettings;
+import static mypals.ml.ScheduledTickVisualizerClient.UpadteSettings;
 
 public class ScheduledTickVisualizerModMenuIntegration implements ModMenuApi {
     @Override
@@ -26,6 +25,12 @@ public class ScheduledTickVisualizerModMenuIntegration implements ModMenuApi {
                         .group(OptionGroup.createBuilder()
                                 .name(Text.translatable("config.scheduledtickvisualizer.render"))
                                 .description(OptionDescription.of(Text.translatable("config.scheduledtickvisualizer.render.description")))
+                                .option(Option.<Boolean>createBuilder()
+                                        .name(Text.translatable("config.scheduledtickvisualizer.simplifyInfo"))
+                                        .description(OptionDescription.of(Text.translatable("config.scheduledtickvisualizer.simplifyInfo.description")))
+                                        .binding(false, () -> instance.instance().simplify, newVal -> instance.instance().simplify = newVal)
+                                        .controller(TickBoxControllerBuilder::create)
+                                        .build())
                                 .option(Option.<Boolean>createBuilder()
                                         .name(Text.translatable("config.scheduledtickvisualizer.main_render"))
                                         .description(OptionDescription.of(Text.translatable("config.scheduledtickvisualizer.main_render.description")))
@@ -47,7 +52,7 @@ public class ScheduledTickVisualizerModMenuIntegration implements ModMenuApi {
                                 .option(Option.<Boolean>createBuilder()
                                         .name(Text.translatable("config.scheduledtickvisualizer.background"))
                                         .description(OptionDescription.of(Text.translatable("config.scheduledtickvisualizer.background.description")))
-                                        .binding(true, () -> instance.instance().background, newVal -> instance.instance().background = newVal)
+                                        .binding(false, () -> instance.instance().background, newVal -> instance.instance().background = newVal)
                                         .controller(TickBoxControllerBuilder::create)
                                         .build())
                                 .option(Option.<Boolean>createBuilder()
