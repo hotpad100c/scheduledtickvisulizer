@@ -1,31 +1,43 @@
 package mypals.ml;
 
+import com.mojang.brigadier.arguments.IntegerArgumentType;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.mojang.brigadier.context.CommandContext;
+import mypals.ml.LogsManager.LogManager;
 import net.fabricmc.api.ModInitializer;
 
+import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.gamerule.v1.GameRuleFactory;
 import net.fabricmc.fabric.api.gamerule.v1.GameRuleRegistry;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.command.CommandManager;
+import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.GameRules;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.function.Supplier;
 
 public class ScheduledTickVisualizer implements ModInitializer {
 	public static final String MOD_ID = "scheduledtickvisualizer";
-	public static MinecraftServer server;
-	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
-	public static List<SchedulTickObject> schedulTickObjectList = new CopyOnWriteArrayList<>();
+	public static MinecraftServer server = null;
+	//public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 	public static final Identifier TICK_PACKET_ID = Identifier.of(MOD_ID, "tick_data_packet");
+
+	public static LogManager logManager;
 	public static final GameRules.Key<GameRules.IntRule> SCHEDULED_TICK_PACK_RANGE = GameRuleRegistry.register(
 			"scheduledTickInformationRange",
 			GameRules.Category.MISC,
@@ -36,14 +48,40 @@ public class ScheduledTickVisualizer implements ModInitializer {
 		return Identifier.of(MOD_ID, path);
 	}
 	public void onInitialize() {
-		ServerTickEvents.START_WORLD_TICK.register(this::OnServerTick);
+		ServerTickEvents.END_WORLD_TICK.register(this::OnServerTick);
 		ServerLifecycleEvents.SERVER_STARTED.register(s -> server = s);
-		// 服务器启动时需要注册
 		PayloadTypeRegistry.playS2C().register(ScheduledTickDataPayload.ID,ScheduledTickDataPayload.CODEC);
+		CommandRegistrationCallback.EVENT.register((dispatcher, e,registryAccess) -> {
+			dispatcher.register(
+					CommandManager.literal("scheduledTickVisualizerServer")
+							.then(CommandManager.literal("server")
+									.then(CommandManager.literal("log")
+											.then(CommandManager.argument("ticks", IntegerArgumentType.integer())
+													.executes(this::executeCommand)))));
+		});
+	}
+	private int executeCommand(CommandContext<ServerCommandSource> context) {
+		int ticks = IntegerArgumentType.getInteger(context, "ticks");
+		ServerCommandSource source = context.getSource();
+		source.sendFeedback(()->Text.literal("Started log for["+ticks+"]ticks..."), false);
+		LocalDateTime now = LocalDateTime.now();
+
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy_MM_dd_HH_mm_ss");
+		String formattedDate = now.format(formatter);
+		String name = "scheduledTickLog_" + formattedDate;
+		if(logManager != null && logManager.fileName.equals(name)){
+			logManager.ticks = ticks;
+			return 1;
+		}
+		logManager = new LogManager(name,ticks);
+		return 1;
 	}
 
 	private void OnServerTick(ServerWorld serverWorld) {
-		schedulTickObjectList.clear();
+		if(logManager != null && logManager.ticks > 0)
+			logManager.ticks--;
+		else
+			logManager = null;
 	}
 	public static List<ServerPlayerEntity> getPlayersNearBy(BlockPos blockPos,float distance){
 		List<ServerPlayerEntity> pList = new ArrayList<>();

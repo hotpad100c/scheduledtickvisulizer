@@ -3,13 +3,13 @@
 	"id": "scheduledtickvisualizer",
 	"version": "${version}",
 	"name": "ScheduledTickVisualizer",
-	"description": "",
+	"description": "A scheduled tick visualizer mod.",
 	"authors": [
 		"Ryan100c"
 	],
 	"contact": {
-		"homepage": "",
-		"sources": ""
+		"homepage": "https://github.com/hotpad100c/scheduledtickvisulizer",
+		"sources": "https://github.com/hotpad100c/scheduledtickvisulizer"
 	},
 	"license": "CC0-1.0",
 	"icon": "assets/scheduledtickvisualizer/icon.png",

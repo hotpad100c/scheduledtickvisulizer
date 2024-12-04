@@ -1,5 +1,6 @@
 package mypals.ml.mixin;
 
+import mypals.ml.LogsManager.ScheduledTickVisualizerLogger;
 import mypals.ml.SchedulTickObject;
 import mypals.ml.ScheduledTickDataPayload;
 import mypals.ml.ScheduledTickVisualizer;
@@ -82,4 +83,39 @@ public abstract class ServerWorldMixin extends World implements StructureWorldAc
             }
         }
     }
+    @Inject(method = "Lnet/minecraft/server/world/ServerWorld;tick(Ljava/util/function/BooleanSupplier;)V",
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/world/tick/WorldTickScheduler;tick(JILjava/util/function/BiConsumer;)V",
+                    shift = At.Shift.BEFORE,ordinal = 0))
+    public void tickBlockTickSchedulerStart(BooleanSupplier shouldKeepTicking, CallbackInfo ci) {
+        if(ScheduledTickVisualizer.logManager != null && ScheduledTickVisualizer.logManager.ticks > 0){
+            ScheduledTickVisualizerLogger.writeLogFile(ScheduledTickVisualizer.logManager.fileName,"-----------------------------------");
+            ScheduledTickVisualizerLogger.writeLogFile(ScheduledTickVisualizer.logManager.fileName,"ServerWorld:Ticking BlockTickScheduler..");
+        }
+    }
+    @Inject(method = "Lnet/minecraft/server/world/ServerWorld;tick(Ljava/util/function/BooleanSupplier;)V",
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/world/tick/WorldTickScheduler;tick(JILjava/util/function/BiConsumer;)V",
+                    shift = At.Shift.AFTER,ordinal = 0))
+    public void tickBlockTickSchedulerEnd(BooleanSupplier shouldKeepTicking, CallbackInfo ci) {
+        if(ScheduledTickVisualizer.logManager != null && ScheduledTickVisualizer.logManager.ticks > 0){
+            ScheduledTickVisualizerLogger.writeLogFile(ScheduledTickVisualizer.logManager.fileName,"ServerWorld:Finished ticking BlockTickScheduler..");
+        }
+    }
+    @Inject(method = "Lnet/minecraft/server/world/ServerWorld;tick(Ljava/util/function/BooleanSupplier;)V",
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/world/tick/WorldTickScheduler;tick(JILjava/util/function/BiConsumer;)V",
+                    shift = At.Shift.BEFORE,ordinal = 1))
+    public void tickFluidTickSchedulerStart(BooleanSupplier shouldKeepTicking, CallbackInfo ci) {
+        if(ScheduledTickVisualizer.logManager != null && ScheduledTickVisualizer.logManager.ticks > 0){
+            ScheduledTickVisualizerLogger.writeLogFile(ScheduledTickVisualizer.logManager.fileName,"ServerWorld:Ticking FluidTickScheduler...");
+        }
+    }
+    @Inject(method = "Lnet/minecraft/server/world/ServerWorld;tick(Ljava/util/function/BooleanSupplier;)V",
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/world/tick/WorldTickScheduler;tick(JILjava/util/function/BiConsumer;)V",
+                    shift = At.Shift.AFTER,ordinal = 1))
+    public void tickFluidTickSchedulerEnd(BooleanSupplier shouldKeepTicking, CallbackInfo ci) {
+        if(ScheduledTickVisualizer.logManager != null && ScheduledTickVisualizer.logManager.ticks > 0){
+            ScheduledTickVisualizerLogger.writeLogFile(ScheduledTickVisualizer.logManager.fileName,"ServerWorld:Finished ticking FluidTickScheduler..");
+            ScheduledTickVisualizerLogger.writeLogFile(ScheduledTickVisualizer.logManager.fileName,"-----------------------------------");
+        }
+    }
+
 }

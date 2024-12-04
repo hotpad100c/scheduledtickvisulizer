@@ -20,7 +20,7 @@ public class CommandRegister {
 
         dispatcher.register(
 
-                literal("scheduleTickVisualizer")
+                literal("scheduledTickVisualizer")
                         .executes(context -> {
                             FabricClientCommandSource source = context.getSource();
 
