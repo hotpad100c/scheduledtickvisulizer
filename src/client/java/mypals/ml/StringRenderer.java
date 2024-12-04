@@ -21,19 +21,6 @@ public class StringRenderer {
     public static double lastTickPosX = 0;
     public static double lastTickPosY = 0;
     public static double lastTickPosZ = 0;
-    public static void renderText(MatrixStack matrixStack, RenderTickCounter counter, BlockPos pos, String text, int color, float SIZE, boolean seeThrow)
-    {
-        MinecraftClient client = MinecraftClient.getInstance();
-        Camera camera = client.gameRenderer.getCamera();
-        Vec3d textPos = new Vec3d(pos.toCenterPos().toVector3f());
-        drawString(matrixStack, counter, camera, textPos, text, color, SIZE, seeThrow);
-    }
-    public static void renderText(MatrixStack matrixStack, RenderTickCounter counter, Vec3d pos, String text, int color, float SIZE, boolean seeThrow)
-    {
-        MinecraftClient client = MinecraftClient.getInstance();
-        Camera camera = client.gameRenderer.getCamera();
-        drawString(matrixStack, counter, camera, pos, text, color, SIZE, seeThrow);
-    }
     public static void renderTextList(MatrixStack matrixStack, BlockPos pos, float tickDelta, float line, ArrayList<String> texts, ArrayList<Integer> colors, float size) {
         drawStringList(matrixStack, pos, tickDelta,  line, texts, colors, size) ;
 
@@ -154,12 +141,11 @@ public class StringRenderer {
         }
     }
 
-    public static void drawString(MatrixStack matrixStack,RenderTickCounter tickCounter, Camera camera, Vec3d textPos, String text, int color, float SIZE, boolean seeThrow) {
+    public static void drawString(MatrixStack matrixStack,float tickDelta, Camera camera, Vec3d textPos, String text, int color, float SIZE, boolean seeThrow) {
 
         Matrix4fStack modelViewMatrix = new Matrix4fStack(1);
         modelViewMatrix.identity();
 
-        float tickDelta = tickCounter.getTickDelta(true);
         float x = (float) (textPos.x - MathHelper.lerp(tickDelta, lastTickPosX, camera.getPos().getX()));
         float y = (float) (textPos.y - MathHelper.lerp(tickDelta, lastTickPosY, camera.getPos().getY()));
         float z = (float) (textPos.z - MathHelper.lerp(tickDelta, lastTickPosZ, camera.getPos().getZ()));

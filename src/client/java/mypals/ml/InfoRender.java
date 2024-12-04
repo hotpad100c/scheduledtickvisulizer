@@ -32,26 +32,9 @@ public class InfoRender {
         reorderedFluidTicks = TickOrderResolver.resolveTickOrder(scheduledTicks);
     }
     @SuppressWarnings("ConstantConditions")
-    public static void render(MatrixStack matrixStack, RenderTickCounter counter) {
+    public static void render(MatrixStack matrixStack, Float tickDelta) {
         if(showInfo) {
-
-            /*if(!reorderedBlockTicks.isEmpty() && ScheduledTickVisulizerClient.orderViewerIndex>=0 &&
-                    ScheduledTickVisulizerClient.orderViewerIndex < reorderedBlockTicks.size()){
-                BlockPos pos = reorderedBlockTicks.get(ScheduledTickVisulizerClient.orderViewerIndex);
-                drawCube(matrixStack,pos,1.1f,counter.getTickDelta(true),
-                        new Color(225,225,225),boxAlpha);
-            }
-            else{
-                if(!reorderedFluidTicks.isEmpty() && ScheduledTickVisulizerClient.orderViewerIndex >= reorderedBlockTicks.size()
-                        && ScheduledTickVisulizerClient.orderViewerIndex < reorderedFluidTicks.size() ){
-                    BlockPos pos = reorderedFluidTicks.get(ScheduledTickVisulizerClient.orderViewerIndex);
-                    drawCube(matrixStack,pos,1.1f,counter.getTickDelta(true),
-                            new Color(225,225,225),boxAlpha);
-                }
-                else {
-                    ScheduledTickVisulizerClient.orderViewerIndex = 0;
-                }
-            }*/
+            
             if (!reorderedBlockTicks.isEmpty() || !reorderedFluidTicks.isEmpty()) {
                 int totalSize = reorderedBlockTicks.size() + reorderedFluidTicks.size();
 
@@ -67,7 +50,7 @@ public class InfoRender {
                     pos = reorderedFluidTicks.get(fluidIndex);
                 }
 
-                drawCube(matrixStack, pos, 0.01f, counter.getTickDelta(true),
+                drawCube(matrixStack, pos, 0.01f, tickDelta,
                         new Color(225, 225, 225), boxAlpha);
             }
 
@@ -103,9 +86,9 @@ public class InfoRender {
                         colors.add(priorityColor.getRGB());
                     }
                 }
-                renderTextList(matrixStack, tick.pos, counter.getTickDelta(true), 5, text, colors, textSize);
+                renderTextList(matrixStack, tick.pos, tickDelta, 5, text, colors, textSize);
                 if(showInfoBox)
-                    drawCube(matrixStack,tick.pos,0f,counter.getTickDelta(true),
+                    drawCube(matrixStack,tick.pos,0f,tickDelta,
                             new Color(blockTickColor.getRed(),blockTickColor.getGreen(),blockTickColor.getBlue()),boxAlpha);
 
             }
@@ -141,9 +124,9 @@ public class InfoRender {
                         colors.add(priorityColor.getRGB());
                     }
                 }
-                renderTextList(matrixStack, tick.pos, counter.getTickDelta(true), 5, text, colors, textSize);
+                renderTextList(matrixStack, tick.pos, tickDelta, 5, text, colors, textSize);
                 if (showInfoBox)
-                    drawCube(matrixStack, tick.pos, 0f, counter.getTickDelta(true),
+                    drawCube(matrixStack, tick.pos, 0f, tickDelta,
                             new Color(fluidTickColor.getRed(), fluidTickColor.getGreen(), fluidTickColor.getBlue()), boxAlpha);
             }
             if(fluidTickDataClearTimer>0)
