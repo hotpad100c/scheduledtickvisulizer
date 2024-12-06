@@ -1,54 +1,34 @@
 package mypals.ml;
 
-import net.minecraft.network.PacketByteBuf;
-import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.tick.TickPriority;
-import org.jetbrains.annotations.Nullable;
 
-public class SchedulTickObject {
-    public  BlockPos pos;
-    public long triggerTick;
+import java.util.Objects;
+
+public final class SchedulTickObject{
+    public BlockPos pos;
+    public long time;
     public int priority;
-    public long subTickOrder;
+    public long subTick;
+    public String name;
 
-    public final String type;
-    public SchedulTickObject(BlockPos pos, long triggerTick, int priority, long subTickOrder, String type) {
-        this.pos = pos;
-        this.triggerTick = triggerTick;
-        this.priority = priority;
-        this.subTickOrder = subTickOrder;
-        this.type = type;
+    public SchedulTickObject(BlockPos pos, long time, int priority, long subTick, String name) {
+        this.pos=pos;
+        this.time=time;
+        this.priority=priority;
+        this.subTick=subTick;
+        this.name=name;
     }
-    public BlockPos getPos(){
-        return pos;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SchedulTickObject obj = (SchedulTickObject) o;
+        return pos==obj.pos && time==obj.time && priority==obj.priority && subTick==obj.subTick && name==obj.name;
     }
-    public long getTriggerTick(){
-        return triggerTick;
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(pos, time, priority, subTick, name);
     }
-    public int getPriority(){
-        return priority;
-    }
-    public long getTickOrder(){
-        return subTickOrder;
-    }
-    public String getType(){
-        return type;
-    }
-    public static final PacketCodec<PacketByteBuf,SchedulTickObject> CODEC = PacketCodec.of(
-            (value, buf) -> {
-                buf.writeBlockPos(value.getPos());
-                buf.writeLong(value.getTriggerTick());
-                buf.writeInt(value.getPriority());
-                buf.writeLong(value.getTickOrder());
-                buf.writeString(value.getType());
-            },
-            buf -> new SchedulTickObject(
-                    buf.readBlockPos(),
-                    buf.readLong(),
-                    buf.readInt(),
-                    buf.readLong(),
-                    buf.readString()
-            )
-    );
 }

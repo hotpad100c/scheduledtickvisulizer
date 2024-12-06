@@ -1,6 +1,5 @@
 package mypals.ml;
 
-import com.jcraft.jorbis.Block;
 import net.minecraft.util.math.BlockPos;
 
 import java.util.ArrayList;
@@ -12,13 +11,13 @@ public class TickOrderResolver {
     public static List<BlockPos> resolveTickOrder(List<SchedulTickObject> scheduledTicks) {
 
         scheduledTicks.sort(Comparator
-                .comparingLong((SchedulTickObject d) -> d.triggerTick)
+                .comparingLong((SchedulTickObject d) -> d.time)
                 .thenComparingInt(d -> d.priority)
-                .thenComparingLong(d -> d.subTickOrder)
+                .thenComparingLong(d -> d.subTick)
         );
         List<BlockPos> ordered= new ArrayList<>();
         for (SchedulTickObject tick : scheduledTicks) {
-            ordered.add(new BlockPos(tick.getPos()));
+            ordered.add(new BlockPos(tick.pos));
         }
         return ordered;
     }

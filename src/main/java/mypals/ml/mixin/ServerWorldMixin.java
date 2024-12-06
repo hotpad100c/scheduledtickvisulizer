@@ -2,12 +2,15 @@ package mypals.ml.mixin;
 
 import mypals.ml.LogsManager.ScheduledTickVisualizerLogger;
 import mypals.ml.SchedulTickObject;
-import mypals.ml.ScheduledTickDataPayload;
 import mypals.ml.ScheduledTickVisualizer;
 import net.fabricmc.fabric.api.attachment.v1.AttachmentTarget;
+import net.fabricmc.fabric.api.networking.v1.FabricPacket;
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.block.Block;
+import net.minecraft.entity.ai.brain.ScheduleRule;
 import net.minecraft.fluid.Fluid;
+import net.minecraft.network.PacketByteBuf;
 import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.entry.RegistryEntry;
@@ -39,13 +42,11 @@ import static mypals.ml.ScheduledTickVisualizer.getPlayersNearBy;
 public abstract class ServerWorldMixin extends World implements StructureWorldAccess, AttachmentTarget {
     @Shadow @Final private WorldTickScheduler<Block> blockTickScheduler;
     @Shadow @Final private WorldTickScheduler<Fluid> fluidTickScheduler;
-
     protected ServerWorldMixin(MutableWorldProperties properties, RegistryKey<World> registryRef, DynamicRegistryManager registryManager, RegistryEntry<DimensionType> dimensionEntry, Supplier<Profiler> profiler, boolean isClient, boolean debugWorld, long biomeAccess, int maxChainedNeighborUpdates) {
         super(properties, registryRef, registryManager, dimensionEntry, profiler, isClient, debugWorld, biomeAccess, maxChainedNeighborUpdates);
     }
-
     @Inject(method = "Lnet/minecraft/server/world/ServerWorld;tick(Ljava/util/function/BooleanSupplier;)V",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/world/tick/TickManager;shouldTick()Z",
+            at = @At(value = "HEAD",
             shift = At.Shift.AFTER))
     public void tick(BooleanSupplier shouldKeepTicking, CallbackInfo ci) {
         List<SchedulTickObject> orderedFluidTicks = new ArrayList<>();
@@ -78,10 +79,16 @@ public abstract class ServerWorldMixin extends World implements StructureWorldAc
         });
         if(ScheduledTickVisualizer.server != null){
             for(ServerPlayerEntity player : players){
-                ServerPlayNetworking.send(player,new ScheduledTickDataPayload(orderedBlockTicks,"Block"));
-                ServerPlayNetworking.send(player,new ScheduledTickDataPayload(orderedFluidTicks,"Fluid"));
+                ServerPlayNetworking.send(player,ScheduledTickVisualizer.TICK_PACKET_ID,ScheduledTickData(orderedBlockTicks,"Block"));
+                ServerPlayNetworking.send(player,ScheduledTickVisualizer.TICK_PACKET_ID,ScheduledTickData(orderedFluidTicks,"Fluid"));
             }
         }
+    }
+    protected PacketByteBuf ScheduledTickData(List<SchedulTickObject> ticks,String type) {
+        PacketByteBuf buf = PacketByteBufs.create();
+        buf.writeString(type);
+        buf.writeCollection(ticks,null);
+        return buf;
     }
     @Inject(method = "Lnet/minecraft/server/world/ServerWorld;tick(Ljava/util/function/BooleanSupplier;)V",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/world/tick/WorldTickScheduler;tick(JILjava/util/function/BiConsumer;)V",
