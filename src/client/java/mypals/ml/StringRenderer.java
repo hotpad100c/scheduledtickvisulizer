@@ -28,51 +28,45 @@ public class StringRenderer {
     private static VertexConsumerProvider.Immediate getVertexConsumer() {
         return MinecraftClient.getInstance().getBufferBuilders().getEntityVertexConsumers();
     }
-    public static void drawStringList(MatrixStack matrices, BlockPos textPos, float tickDelta, float line, ArrayList<String> texts, ArrayList<Integer> colors, float size) {
+    private static void drawStringList(MatrixStack matrixStack, BlockPos pos,float tickDelta, float line, ArrayList<String> texts, ArrayList<Integer> colors, float size)
+    {
         MinecraftClient client = MinecraftClient.getInstance();
         Camera camera = client.gameRenderer.getCamera();
-        //modelViewMatrixStack modelViewMatrix = new modelViewMatrixStack(1);
-        //modelViewMatrix.identity();
+        if (camera.isReady() && client.getEntityRenderDispatcher().gameOptions != null && client.player != null)
+        {
+            double x = (double)pos.toCenterPos().getX();
+            double y = (double)pos.toCenterPos().getY();
+            double z = (double)pos.toCenterPos().getZ();
+            double camX = camera.getPos().x;
+            double camY = camera.getPos().y;
+            double camZ = camera.getPos().z;
+            matrixStack.push();
+            matrixStack.translate((float)(x - camX), (float)(y - camY), (float)(z - camZ));
+            matrixStack.multiplyPositionMatrix(new Matrix4f().rotation(camera.getRotation()));
+            matrixStack.scale(-size, -size, 1);
+            RenderSystem.disableDepthTest();  // visibleThroughObjects
 
-        if (camera.isReady() && client.getEntityRenderDispatcher().gameOptions != null && client.player != null) {
-            matrices.push();
-            float x = (float) (textPos.toCenterPos().getX() - MathHelper.lerp(tickDelta, lastTickPosX, camera.getPos().getX()));
-            float y = (float) (textPos.toCenterPos().getY() - MathHelper.lerp(tickDelta, lastTickPosY, camera.getPos().getY()));
-            float z = (float) (textPos.toCenterPos().getZ() - MathHelper.lerp(tickDelta, lastTickPosZ, camera.getPos().getZ()));
-            lastTickPosX = camera.getPos().getX();
-            lastTickPosY = camera.getPos().getY();
-            lastTickPosZ = camera.getPos().getZ();
-
-            matrices.translate(x, y, z);
-            matrices.multiply(MinecraftClient.getInstance().gameRenderer.getCamera().getRotation());
-            matrices.scale(size, -size, 1);
-            Matrix4f modelViewMatrix = matrices.peek().getPositionMatrix();
-
-            TextRenderer textRenderer = MinecraftClient.getInstance().textRenderer;
-
-            RenderSystem.disableDepthTest();
-
-            float totalHeight = 0.0F;
-            for (String text : texts) {
-                totalHeight += textRenderer.getWrappedLinesHeight(text, Integer.MAX_VALUE) * 1.25F;
+            float totalWidth = 0.0F;
+            for (String text: texts)
+            {
+                totalWidth += client.textRenderer.getWidth(text);
             }
 
-            float renderYBase = -totalHeight / 2.0F; // 起始位置，从底部开始
-            for (int i = 0; i < texts.size(); i++) {
-                float renderX = -textRenderer.getWidth(texts.get(i)) * 0.5F; // 居中
-                float renderY = renderYBase + textRenderer.getWrappedLinesHeight(texts.get(i), Integer.MAX_VALUE) * 1.25F * i;
-                VertexConsumerProvider.Immediate immediate = getVertexConsumer();
-                textRenderer.draw(
-                        texts.get(i), renderX, renderY, colors.get(i) != null? colors.get(i) : Color.white.getRGB(), shadow,
-                        modelViewMatrix, immediate, TextRenderer.TextLayerType.SEE_THROUGH, background?backgroundColor.getRGB():0,
-                        0xF000F0
-                );
+            float writtenWidth = 0.0F;
+            for (int i = 0; i < texts.size(); i++)
+            {
+                float renderX = -totalWidth * 0.5F + writtenWidth;
+                float renderY = client.textRenderer.getWrappedLinesHeight(texts.get(i), Integer.MAX_VALUE) * (-0.5F + 1.25F * line);
+
+                VertexConsumerProvider.Immediate immediate = VertexConsumerProvider.immediate(Tessellator.getInstance().getBuffer());
+                client.textRenderer.draw(texts.get(i), renderX, renderY, colors.get(i), false, matrixStack.peek().getPositionMatrix(), immediate, TextRenderer.TextLayerType.SEE_THROUGH, 0, 0xF000F0);
                 immediate.draw();
-            }
-            matrices.pop();
 
-            // 恢复矩阵状态
+                writtenWidth += client.textRenderer.getWidth(texts.get(i));
+            }
+
             RenderSystem.enableDepthTest();
+            matrixStack.pop();
         }
     }
     public static void drawCube(MatrixStack matrices, BlockPos pos, float size, float tickDelta, Color color,float alpha) {
