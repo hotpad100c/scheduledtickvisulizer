@@ -56,7 +56,14 @@ public class ScheduledTickVisualizerClient implements ClientModInitializer {
 		});
 		ClientPlayNetworking.registerGlobalReceiver(ScheduledTickVisualizer.TICK_PACKET_ID, (client, handler, buf, responseSender)->{
 			String type=buf.readString();
-			List<SchedulTickObject> ticks=buf.readCollection(null,null);
+			List<SchedulTickObject> ticks=buf.readCollection(ArrayList::new,
+					packetByteBuf -> new SchedulTickObject(
+							packetByteBuf.readBlockPos(),
+							packetByteBuf.readLong(),
+							packetByteBuf.readInt(),
+							packetByteBuf.readLong(),
+							packetByteBuf.readString()
+					));
 			if(Objects.equals(type, "Block")){
 				if(sortSubOrderInfo){
                     ticks.sort(Comparator.comparingLong(t -> t.subTick));
