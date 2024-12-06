@@ -1,7 +1,6 @@
 package mypals.ml;
 
 import com.mojang.brigadier.arguments.IntegerArgumentType;
-import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import mypals.ml.LogsManager.LogManager;
 import net.fabricmc.api.ModInitializer;
@@ -11,7 +10,6 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.gamerule.v1.GameRuleFactory;
 import net.fabricmc.fabric.api.gamerule.v1.GameRuleRegistry;
-import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
@@ -21,15 +19,11 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.GameRules;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.function.Supplier;
 
 public class ScheduledTickVisualizer implements ModInitializer {
 	public static final String MOD_ID = "scheduledtickvisualizer";
@@ -50,7 +44,6 @@ public class ScheduledTickVisualizer implements ModInitializer {
 	public void onInitialize() {
 		ServerTickEvents.END_WORLD_TICK.register(this::OnServerTick);
 		ServerLifecycleEvents.SERVER_STARTED.register(s -> server = s);
-		PayloadTypeRegistry.playS2C().register(ScheduledTickDataPayload.ID,ScheduledTickDataPayload.CODEC);
 		CommandRegistrationCallback.EVENT.register((dispatcher, e,registryAccess) -> {
 			dispatcher.register(
 					CommandManager.literal("scheduledTickVisualizerServer")

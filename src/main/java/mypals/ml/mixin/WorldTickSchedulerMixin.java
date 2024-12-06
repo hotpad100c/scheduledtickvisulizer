@@ -8,7 +8,6 @@ import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.objects.ObjectIterator;
 import mypals.ml.LogsManager.ScheduledTickVisualizerLogger;
 import mypals.ml.SchedulTickObject;
-import mypals.ml.ScheduledTickDataPayload;
 import mypals.ml.ScheduledTickVisualizer;
 import net.minecraft.world.tick.ChunkTickScheduler;
 import net.minecraft.world.tick.OrderedTick;

@@ -59,8 +59,8 @@ public class InfoRender {
                 ArrayList<String> text = new ArrayList<>();
                 if(simplify){
                     text.add(
-                            tick.subTickOrder + "@" +
-                            tick.triggerTick +
+                            tick.subTick + "@" +
+                            tick.time +
                             (tick.priority != 0 ? ("[" + tick.priority +"]"):"")
                     );
                     colors.add(blockTickColor.getRGB());
@@ -68,17 +68,17 @@ public class InfoRender {
                 else{
                     if(showTickTypeInfo){
                         if(showAccurateBlockType)
-                            text.add(tick.type);
+                            text.add(tick.name);
                         else
                             text.add(Text.translatable("text.scheduledtick.block").getString());
                         colors.add(blockTickColor.getRGB());
                     }
                     if(showSubOrderInfo){
-                        text.add( Text.translatable("text.scheduledtick.sub_order").getString() + ": " + tick.subTickOrder);
+                        text.add( Text.translatable("text.scheduledtick.sub_order").getString() + ": " + tick.subTick);
                         colors.add(subOrderColor.getRGB());
                     }
                     if(showTriggerInfo){
-                        text.add(  Text.translatable("text.scheduledtick.trigger").getString() + ": " + tick.triggerTick);
+                        text.add(  Text.translatable("text.scheduledtick.trigger").getString() + ": " + tick.time);
                         colors.add(triggerColor.getRGB());
                     }
                     if(showPriorityInfo){
@@ -97,8 +97,8 @@ public class InfoRender {
                 ArrayList<String> text = new ArrayList<>();
                 if(simplify){
                     text.add(
-                            tick.subTickOrder + "@" +
-                            tick.triggerTick +
+                            tick.subTick + "@" +
+                            tick.time +
                             (tick.priority != 0 ? ("[" + tick.priority +"]"):"")
                     );
                     colors.add(fluidTickColor.getRGB());
@@ -106,17 +106,17 @@ public class InfoRender {
                 else {
                     if (showTickTypeInfo) {
                         if (showAccurateBlockType)
-                            text.add(tick.type);
+                            text.add(tick.name);
                         else
                             text.add(Text.translatable("text.scheduledtick.fluid").getString());
                         colors.add(fluidTickColor.getRGB());
                     }
                     if (showSubOrderInfo) {
-                        text.add(Text.translatable("text.scheduledtick.sub_order").getString() + ": " + tick.subTickOrder);
+                        text.add(Text.translatable("text.scheduledtick.sub_order").getString() + ": " + tick.subTick);
                         colors.add(subOrderColor.getRGB());
                     }
                     if (showTriggerInfo) {
-                        text.add(Text.translatable("text.scheduledtick.trigger").getString() + ": " + tick.triggerTick);
+                        text.add(Text.translatable("text.scheduledtick.trigger").getString() + ": " + tick.time);
                         colors.add(triggerColor.getRGB());
                     }
                     if (showPriorityInfo) {

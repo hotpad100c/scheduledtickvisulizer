@@ -54,28 +54,28 @@ public class ScheduledTickVisualizerClient implements ClientModInitializer {
 				orderViewerIndex++;
 			}
 		});
-		ClientPlayNetworking.registerGlobalReceiver(ScheduledTickDataPayload.ID, (payload, context) -> {
-			if(Objects.equals(payload.type(), "Block")){
+		ClientPlayNetworking.registerGlobalReceiver(ScheduledTickVisualizer.TICK_PACKET_ID, (client, handler, buf, responseSender)->{
+			String type=buf.readString();
+			List<SchedulTickObject> ticks=buf.readCollection(null,null);
+			if(Objects.equals(type, "Block")){
 				if(sortSubOrderInfo){
-					List<SchedulTickObject> l = payload.ticks();
-					l.sort(Comparator.comparingLong(t -> t.subTickOrder));
-					for (int i = 0; i < l.size(); i++) {
-						l.get(i).subTickOrder = i + 1;
+                    ticks.sort(Comparator.comparingLong(t -> t.subTick));
+					for (int i = 0; i < ticks.size(); i++) {
+						ticks.get(i).subTick = i + 1;
 					}
-					InfoRender.setScheduledTicksBlock(l);
+					InfoRender.setScheduledTicksBlock(ticks);
 				}else{
-					InfoRender.setScheduledTicksBlock(payload.ticks());
+					InfoRender.setScheduledTicksBlock(ticks);
 				}
-			}else if(Objects.equals(payload.type(), "Fluid")){
+			}else if(Objects.equals(type, "Fluid")){
 				if(sortSubOrderInfo){
-					List<SchedulTickObject> l = payload.ticks();
-					l.sort(Comparator.comparingLong(t -> t.subTickOrder));
-					for (int i = 0; i < l.size(); i++) {
-						l.get(i).subTickOrder = i + 1;
+					ticks.sort(Comparator.comparingLong(t -> t.subTick));
+					for (int i = 0; i < ticks.size(); i++) {
+						ticks.get(i).subTick = i + 1;
 					}
-					InfoRender.setScheduledTicksFluid(l);
+					InfoRender.setScheduledTicksFluid(ticks);
 				}else{
-					InfoRender.setScheduledTicksFluid(payload.ticks());
+					InfoRender.setScheduledTicksFluid(ticks);
 				}
 			}
 		});
