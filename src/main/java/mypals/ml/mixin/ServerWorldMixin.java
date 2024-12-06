@@ -87,7 +87,13 @@ public abstract class ServerWorldMixin extends World implements StructureWorldAc
     protected PacketByteBuf ScheduledTickData(List<SchedulTickObject> ticks,String type) {
         PacketByteBuf buf = PacketByteBufs.create();
         buf.writeString(type);
-        buf.writeCollection(ticks,null);
+        buf.writeCollection(ticks, (packetByteBuf, schedulTickObject) -> {
+            packetByteBuf.writeBlockPos(schedulTickObject.pos);
+            packetByteBuf.writeLong(schedulTickObject.time);
+            packetByteBuf.writeInt(schedulTickObject.priority);
+            packetByteBuf.writeLong(schedulTickObject.subTick);
+            packetByteBuf.writeString(schedulTickObject.name);
+        });
         return buf;
     }
     @Inject(method = "Lnet/minecraft/server/world/ServerWorld;tick(Ljava/util/function/BooleanSupplier;)V",
