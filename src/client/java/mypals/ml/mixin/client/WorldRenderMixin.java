@@ -13,10 +13,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(WorldRenderer.class)
 public class WorldRenderMixin {
 	@Inject(method = "render", at = @At(value = "INVOKE",target = "Lnet/minecraft/client/render/WorldRenderer;renderChunkDebugInfo(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;Lnet/minecraft/client/render/Camera;)V", ordinal = 0))
-	private void render(CallbackInfo ci,
-						@Local (argsOnly = true) MatrixStack matrixStack,
-						@Local Float tickDelta
-	) {
+	public void render(MatrixStack matrixStack,float tickDelta,
+								long limitTime, boolean renderBlockOutline,
+								Camera camera, GameRenderer gameRenderer,
+								LightmapTextureManager lightmapTextureManager, Matrix4f positionMatrix, CallbackInfo ci){
 		InfoRender.render(matrixStack,tickDelta);
 	}
 }
