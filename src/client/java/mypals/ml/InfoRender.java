@@ -50,8 +50,8 @@ public class InfoRender {
                     pos = reorderedFluidTicks.get(fluidIndex);
                 }
 
-                drawCube(matrixStack, pos, 0.01f, tickDelta,
-                        new Color(225, 225, 225), boxAlpha);
+                drawCube2(matrixStack, pos, 0.02f, tickDelta,
+                        new Color(225, 225, 225), Math.min(boxAlpha+0.3f,1f));
             }
 
             for (SchedulTickObject tick : scheduledTicksBlock) {
