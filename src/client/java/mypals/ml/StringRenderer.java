@@ -22,12 +22,9 @@ public class StringRenderer {
     public static double lastTickPosY = 0;
     public static double lastTickPosZ = 0;
     public static void renderTextList(MatrixStack matrixStack, BlockPos pos, float tickDelta, float line, ArrayList<String> texts, ArrayList<Integer> colors, float size) {
-        drawStringList(matrixStack, pos, tickDelta,  line, texts, colors, size) ;
+        drawStringList(matrixStack, pos, tickDelta, line, texts, colors, size) ;
 
         }
-    private static VertexConsumerProvider.Immediate getVertexConsumer() {
-        return MinecraftClient.getInstance().getBufferBuilders().getEntityVertexConsumers();
-    }
     private static void drawStringList(MatrixStack matrixStack, BlockPos pos,float tickDelta, float line, ArrayList<String> texts, ArrayList<Integer> colors, float size)
     {
         MinecraftClient client = MinecraftClient.getInstance();
@@ -82,11 +79,10 @@ public class StringRenderer {
             lastTickPosZ = camera.getPos().getZ();
 
             matrices.translate(x, y, z);
-            //matrices.scale(size, size, size);
             Matrix4f modelViewMatrix = matrices.peek().getPositionMatrix();
             RenderSystem.disableDepthTest();
 
-            VertexConsumerProvider.Immediate immediate = getVertexConsumer();
+            VertexConsumerProvider.Immediate immediate = VertexConsumerProvider.immediate(Tessellator.getInstance().getBuffer());
             VertexConsumer vertexConsumer = immediate.getBuffer(RenderLayer.getDebugQuads());
 
             float minOffset = -0.001F - size;
@@ -96,41 +92,40 @@ public class StringRenderer {
             float green = ((color.getRGB() >> 8) & 0xFF) / 255.0f;
             float blue = (color.getRGB() & 0xFF) / 255.0f;
 
-            vertexConsumer.vertex(modelViewMatrix, minOffset, maxOffset, minOffset).color(red, green, blue, alpha);
-            vertexConsumer.vertex(modelViewMatrix, maxOffset, maxOffset, minOffset).color(red, green, blue, alpha);
-            vertexConsumer.vertex(modelViewMatrix, maxOffset, maxOffset, maxOffset).color(red, green, blue, alpha);
-            vertexConsumer.vertex(modelViewMatrix, minOffset, maxOffset, maxOffset).color(red, green, blue, alpha);
+            vertexConsumer.vertex(modelViewMatrix, minOffset, maxOffset, minOffset).color(red, green, blue, alpha).next();
+            vertexConsumer.vertex(modelViewMatrix, maxOffset, maxOffset, minOffset).color(red, green, blue, alpha).next();
+            vertexConsumer.vertex(modelViewMatrix, maxOffset, maxOffset, maxOffset).color(red, green, blue, alpha).next();
+            vertexConsumer.vertex(modelViewMatrix, minOffset, maxOffset, maxOffset).color(red, green, blue, alpha).next();
 
-            vertexConsumer.vertex(modelViewMatrix, minOffset, minOffset, maxOffset).color(red, green, blue, alpha);
-            vertexConsumer.vertex(modelViewMatrix, maxOffset, minOffset, maxOffset).color(red, green, blue, alpha);
-            vertexConsumer.vertex(modelViewMatrix, maxOffset, minOffset, minOffset).color(red, green, blue, alpha);
-            vertexConsumer.vertex(modelViewMatrix, minOffset, minOffset, minOffset).color(red, green, blue, alpha);
+            vertexConsumer.vertex(modelViewMatrix, minOffset, minOffset, maxOffset).color(red, green, blue, alpha).next();
+            vertexConsumer.vertex(modelViewMatrix, maxOffset, minOffset, maxOffset).color(red, green, blue, alpha).next();
+            vertexConsumer.vertex(modelViewMatrix, maxOffset, minOffset, minOffset).color(red, green, blue, alpha).next();
+            vertexConsumer.vertex(modelViewMatrix, minOffset, minOffset, minOffset).color(red, green, blue, alpha).next();
 
-            vertexConsumer.vertex(modelViewMatrix, minOffset, maxOffset, minOffset).color(red, green, blue, alpha);
-            vertexConsumer.vertex(modelViewMatrix, minOffset, maxOffset, maxOffset).color(red, green, blue, alpha);
-            vertexConsumer.vertex(modelViewMatrix, minOffset, minOffset, maxOffset).color(red, green, blue, alpha);
-            vertexConsumer.vertex(modelViewMatrix, minOffset, minOffset, minOffset).color(red, green, blue, alpha);
+            vertexConsumer.vertex(modelViewMatrix, minOffset, maxOffset, minOffset).color(red, green, blue, alpha).next();
+            vertexConsumer.vertex(modelViewMatrix, minOffset, maxOffset, maxOffset).color(red, green, blue, alpha).next();
+            vertexConsumer.vertex(modelViewMatrix, minOffset, minOffset, maxOffset).color(red, green, blue, alpha).next();
+            vertexConsumer.vertex(modelViewMatrix, minOffset, minOffset, minOffset).color(red, green, blue, alpha).next();
 
-            vertexConsumer.vertex(modelViewMatrix, maxOffset, minOffset, minOffset).color(red, green, blue, alpha);
-            vertexConsumer.vertex(modelViewMatrix, maxOffset, minOffset, maxOffset).color(red, green, blue, alpha);
-            vertexConsumer.vertex(modelViewMatrix, maxOffset, maxOffset, maxOffset).color(red, green, blue, alpha);
-            vertexConsumer.vertex(modelViewMatrix, maxOffset, maxOffset, minOffset).color(red, green, blue, alpha);
+            vertexConsumer.vertex(modelViewMatrix, maxOffset, minOffset, minOffset).color(red, green, blue, alpha).next();
+            vertexConsumer.vertex(modelViewMatrix, maxOffset, minOffset, maxOffset).color(red, green, blue, alpha).next();
+            vertexConsumer.vertex(modelViewMatrix, maxOffset, maxOffset, maxOffset).color(red, green, blue, alpha).next();
+            vertexConsumer.vertex(modelViewMatrix, maxOffset, maxOffset, minOffset).color(red, green, blue, alpha).next();
 
-            vertexConsumer.vertex(modelViewMatrix, minOffset, minOffset, minOffset).color(red, green, blue, alpha);
-            vertexConsumer.vertex(modelViewMatrix, maxOffset, minOffset, minOffset).color(red, green, blue, alpha);
-            vertexConsumer.vertex(modelViewMatrix, maxOffset, maxOffset, minOffset).color(red, green, blue, alpha);
-            vertexConsumer.vertex(modelViewMatrix, minOffset, maxOffset, minOffset).color(red, green, blue, alpha);
+            vertexConsumer.vertex(modelViewMatrix, minOffset, minOffset, minOffset).color(red, green, blue, alpha).next();
+            vertexConsumer.vertex(modelViewMatrix, maxOffset, minOffset, minOffset).color(red, green, blue, alpha).next();
+            vertexConsumer.vertex(modelViewMatrix, maxOffset, maxOffset, minOffset).color(red, green, blue, alpha).next();
+            vertexConsumer.vertex(modelViewMatrix, minOffset, maxOffset, minOffset).color(red, green, blue, alpha).next();
 
-            vertexConsumer.vertex(modelViewMatrix, minOffset, maxOffset, maxOffset).color(red, green, blue, alpha);
-            vertexConsumer.vertex(modelViewMatrix, maxOffset, maxOffset, maxOffset).color(red, green, blue, alpha);
-            vertexConsumer.vertex(modelViewMatrix, maxOffset, minOffset, maxOffset).color(red, green, blue, alpha);
-            vertexConsumer.vertex(modelViewMatrix, minOffset, minOffset, maxOffset).color(red, green, blue, alpha);
+            vertexConsumer.vertex(modelViewMatrix, minOffset, maxOffset, maxOffset).color(red, green, blue, alpha).next();
+            vertexConsumer.vertex(modelViewMatrix, maxOffset, maxOffset, maxOffset).color(red, green, blue, alpha).next();
+            vertexConsumer.vertex(modelViewMatrix, maxOffset, minOffset, maxOffset).color(red, green, blue, alpha).next();
+            vertexConsumer.vertex(modelViewMatrix, minOffset, minOffset, maxOffset).color(red, green, blue, alpha).next();
 
 
             immediate.draw();
             matrices.pop();
 
-            // 恢复矩阵状态
             RenderSystem.enableDepthTest();
         }
     }
