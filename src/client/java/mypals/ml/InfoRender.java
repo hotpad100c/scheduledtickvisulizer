@@ -34,24 +34,6 @@ public class InfoRender {
     @SuppressWarnings("ConstantConditions")
     public static void render(MatrixStack matrixStack, RenderTickCounter counter) {
         if(showInfo) {
-
-            /*if(!reorderedBlockTicks.isEmpty() && ScheduledTickVisulizerClient.orderViewerIndex>=0 &&
-                    ScheduledTickVisulizerClient.orderViewerIndex < reorderedBlockTicks.size()){
-                BlockPos pos = reorderedBlockTicks.get(ScheduledTickVisulizerClient.orderViewerIndex);
-                drawCube(matrixStack,pos,1.1f,counter.getTickDelta(true),
-                        new Color(225,225,225),boxAlpha);
-            }
-            else{
-                if(!reorderedFluidTicks.isEmpty() && ScheduledTickVisulizerClient.orderViewerIndex >= reorderedBlockTicks.size()
-                        && ScheduledTickVisulizerClient.orderViewerIndex < reorderedFluidTicks.size() ){
-                    BlockPos pos = reorderedFluidTicks.get(ScheduledTickVisulizerClient.orderViewerIndex);
-                    drawCube(matrixStack,pos,1.1f,counter.getTickDelta(true),
-                            new Color(225,225,225),boxAlpha);
-                }
-                else {
-                    ScheduledTickVisulizerClient.orderViewerIndex = 0;
-                }
-            }*/
             if (!reorderedBlockTicks.isEmpty() || !reorderedFluidTicks.isEmpty()) {
                 int totalSize = reorderedBlockTicks.size() + reorderedFluidTicks.size();
 

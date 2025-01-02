@@ -8,8 +8,9 @@ public class LogManager {
 
 
     public LogManager(String fileName, int ticks) {
-        this.fileName = fileName;
+        this.fileName = fileName + ".txt";
         this.ticks = ticks;
     }
+
 
 }

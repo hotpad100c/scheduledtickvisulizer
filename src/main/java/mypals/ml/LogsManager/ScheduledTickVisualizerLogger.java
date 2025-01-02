@@ -32,7 +32,7 @@ public class ScheduledTickVisualizerLogger {
             writer.newLine();
             writer.close();
 
-            System.out.println("File written successfully: " + file.getAbsolutePath());
+            //System.out.println("File written successfully: " + file.getAbsolutePath());
         } catch (IOException e) {
             e.printStackTrace();
         }

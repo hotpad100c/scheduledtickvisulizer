@@ -4,7 +4,6 @@ import mypals.ml.LogsManager.ScheduledTickVisualizerLogger;
 import mypals.ml.SchedulTickObject;
 import mypals.ml.ScheduledTickDataPayload;
 import mypals.ml.ScheduledTickVisualizer;
-import net.fabricmc.fabric.api.attachment.v1.AttachmentTarget;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.block.Block;
 import net.minecraft.fluid.Fluid;
@@ -36,7 +35,7 @@ import static mypals.ml.ScheduledTickVisualizer.SCHEDULED_TICK_PACK_RANGE;
 import static mypals.ml.ScheduledTickVisualizer.getPlayersNearBy;
 
 @Mixin(ServerWorld.class)
-public abstract class ServerWorldMixin extends World implements StructureWorldAccess, AttachmentTarget {
+public abstract class ServerWorldMixin extends World implements StructureWorldAccess{
     @Shadow @Final private WorldTickScheduler<Block> blockTickScheduler;
     @Shadow @Final private WorldTickScheduler<Fluid> fluidTickScheduler;
 
@@ -45,13 +44,16 @@ public abstract class ServerWorldMixin extends World implements StructureWorldAc
     }
 
     @Inject(method = "Lnet/minecraft/server/world/ServerWorld;tick(Ljava/util/function/BooleanSupplier;)V",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/world/tick/TickManager;shouldTick()Z",
-            shift = At.Shift.AFTER))
+            at = @At("HEAD"))
     public void tick(BooleanSupplier shouldKeepTicking, CallbackInfo ci) {
         List<SchedulTickObject> orderedFluidTicks = new ArrayList<>();
         List<SchedulTickObject> orderedBlockTicks = new ArrayList<>();
         List<ServerPlayerEntity> players = new ArrayList<>();
         long time = this.getTime();
+        if(ScheduledTickVisualizer.logManager != null && ScheduledTickVisualizer.logManager.ticks > 0) {
+            ScheduledTickVisualizerLogger.writeLogFile(ScheduledTickVisualizer.logManager.fileName, "====================================");
+            ScheduledTickVisualizerLogger.writeLogFile(ScheduledTickVisualizer.logManager.fileName, "|ServerWorld:Started a tick, current tick is: tick" + time);
+        }
         blockTickScheduler.chunkTickSchedulers.values().forEach(chunkTickScheduler -> {
             chunkTickScheduler.getQueueAsStream().forEach(orderedTick ->{
                 if(orderedTick.triggerTick() - time > 0 && !getPlayersNearBy(orderedTick.pos(),this.getGameRules().getInt(SCHEDULED_TICK_PACK_RANGE)).isEmpty()){
@@ -88,8 +90,7 @@ public abstract class ServerWorldMixin extends World implements StructureWorldAc
                     shift = At.Shift.BEFORE,ordinal = 0))
     public void tickBlockTickSchedulerStart(BooleanSupplier shouldKeepTicking, CallbackInfo ci) {
         if(ScheduledTickVisualizer.logManager != null && ScheduledTickVisualizer.logManager.ticks > 0){
-            ScheduledTickVisualizerLogger.writeLogFile(ScheduledTickVisualizer.logManager.fileName,"-----------------------------------");
-            ScheduledTickVisualizerLogger.writeLogFile(ScheduledTickVisualizer.logManager.fileName,"ServerWorld:Ticking BlockTickScheduler..");
+            ScheduledTickVisualizerLogger.writeLogFile(ScheduledTickVisualizer.logManager.fileName,"|--ServerWorld:Ticking BlockTickScheduler..");
         }
     }
     @Inject(method = "Lnet/minecraft/server/world/ServerWorld;tick(Ljava/util/function/BooleanSupplier;)V",
@@ -97,7 +98,7 @@ public abstract class ServerWorldMixin extends World implements StructureWorldAc
                     shift = At.Shift.AFTER,ordinal = 0))
     public void tickBlockTickSchedulerEnd(BooleanSupplier shouldKeepTicking, CallbackInfo ci) {
         if(ScheduledTickVisualizer.logManager != null && ScheduledTickVisualizer.logManager.ticks > 0){
-            ScheduledTickVisualizerLogger.writeLogFile(ScheduledTickVisualizer.logManager.fileName,"ServerWorld:Finished ticking BlockTickScheduler..");
+            ScheduledTickVisualizerLogger.writeLogFile(ScheduledTickVisualizer.logManager.fileName,"L_ServerWorld:Finished ticking BlockTickScheduler..");
         }
     }
     @Inject(method = "Lnet/minecraft/server/world/ServerWorld;tick(Ljava/util/function/BooleanSupplier;)V",
@@ -105,7 +106,7 @@ public abstract class ServerWorldMixin extends World implements StructureWorldAc
                     shift = At.Shift.BEFORE,ordinal = 1))
     public void tickFluidTickSchedulerStart(BooleanSupplier shouldKeepTicking, CallbackInfo ci) {
         if(ScheduledTickVisualizer.logManager != null && ScheduledTickVisualizer.logManager.ticks > 0){
-            ScheduledTickVisualizerLogger.writeLogFile(ScheduledTickVisualizer.logManager.fileName,"ServerWorld:Ticking FluidTickScheduler...");
+            ScheduledTickVisualizerLogger.writeLogFile(ScheduledTickVisualizer.logManager.fileName,"|--ServerWorld:Ticking FluidTickScheduler...");
         }
     }
     @Inject(method = "Lnet/minecraft/server/world/ServerWorld;tick(Ljava/util/function/BooleanSupplier;)V",
@@ -113,8 +114,7 @@ public abstract class ServerWorldMixin extends World implements StructureWorldAc
                     shift = At.Shift.AFTER,ordinal = 1))
     public void tickFluidTickSchedulerEnd(BooleanSupplier shouldKeepTicking, CallbackInfo ci) {
         if(ScheduledTickVisualizer.logManager != null && ScheduledTickVisualizer.logManager.ticks > 0){
-            ScheduledTickVisualizerLogger.writeLogFile(ScheduledTickVisualizer.logManager.fileName,"ServerWorld:Finished ticking FluidTickScheduler..");
-            ScheduledTickVisualizerLogger.writeLogFile(ScheduledTickVisualizer.logManager.fileName,"-----------------------------------");
+            ScheduledTickVisualizerLogger.writeLogFile(ScheduledTickVisualizer.logManager.fileName,"L_ServerWorld:Finished ticking FluidTickScheduler..");
         }
     }
 
