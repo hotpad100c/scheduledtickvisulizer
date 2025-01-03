@@ -32,7 +32,7 @@ public class InfoRender {
         reorderedFluidTicks = TickOrderResolver.resolveTickOrder(scheduledTicks);
     }
     @SuppressWarnings("ConstantConditions")
-    public static void render(MatrixStack matrixStack, RenderTickCounter counter) {
+    public static void render(MatrixStack matrixStack) {
         if(showInfo) {
             if (!reorderedBlockTicks.isEmpty() || !reorderedFluidTicks.isEmpty()) {
                 int totalSize = reorderedBlockTicks.size() + reorderedFluidTicks.size();
@@ -49,7 +49,7 @@ public class InfoRender {
                     pos = reorderedFluidTicks.get(fluidIndex);
                 }
 
-                drawCube(matrixStack, pos, 0.01f, counter.getTickDelta(true),
+                drawCube(matrixStack, pos, 0.01f, 0,
                         new Color(225, 225, 225), boxAlpha);
             }
 
@@ -85,9 +85,9 @@ public class InfoRender {
                         colors.add(priorityColor.getRGB());
                     }
                 }
-                renderTextList(matrixStack, tick.pos, counter.getTickDelta(true), 5, text, colors, textSize);
+                renderTextList(matrixStack, tick.pos, 0, 5, text, colors, textSize);
                 if(showInfoBox)
-                    drawCube(matrixStack,tick.pos,0f,counter.getTickDelta(true),
+                    drawCube(matrixStack,tick.pos,0f,0,
                             new Color(blockTickColor.getRed(),blockTickColor.getGreen(),blockTickColor.getBlue()),boxAlpha);
 
             }
@@ -123,9 +123,9 @@ public class InfoRender {
                         colors.add(priorityColor.getRGB());
                     }
                 }
-                renderTextList(matrixStack, tick.pos, counter.getTickDelta(true), 5, text, colors, textSize);
+                renderTextList(matrixStack, tick.pos, 0, 5, text, colors, textSize);
                 if (showInfoBox)
-                    drawCube(matrixStack, tick.pos, 0f, counter.getTickDelta(true),
+                    drawCube(matrixStack, tick.pos, 0f, 0,
                             new Color(fluidTickColor.getRed(), fluidTickColor.getGreen(), fluidTickColor.getBlue()), boxAlpha);
             }
             if(fluidTickDataClearTimer>0)
