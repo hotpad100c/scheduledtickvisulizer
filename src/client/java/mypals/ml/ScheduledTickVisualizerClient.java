@@ -1,12 +1,13 @@
 package mypals.ml;
 
-import mypals.ml.command.CommandRegister;
+import mypals.ml.command.ScheduledTickVisualizerCommandRegister;
 import mypals.ml.config.ScheduledTickVisualizerConfig;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
 import org.lwjgl.glfw.GLFW;
@@ -30,7 +31,9 @@ public class ScheduledTickVisualizerClient implements ClientModInitializer {
 	@Override
 	public void onInitializeClient() {
 		UpadteSettings();
-
+		ClientCommandRegistrationCallback.EVENT.register((commandDispatcher, commandRegistryAccess) -> {
+			ScheduledTickVisualizerCommandRegister.register(commandDispatcher);
+		});
 		viewOrderKeyBindingUp = KeyBindingHelper.registerKeyBinding(new KeyBinding(
 				"key.scheduledTickVisualizer.up",
 				InputUtil.Type.KEYSYM,
@@ -43,9 +46,6 @@ public class ScheduledTickVisualizerClient implements ClientModInitializer {
 				GLFW.GLFW_KEY_DOWN,
 				"category.scheduledTickVisualizer.keys"
 		));
-		ClientCommandRegistrationCallback.EVENT.register((commandDispatcher, commandRegistryAccess) -> {
-			CommandRegister.register(commandDispatcher);
-		});
 		ClientTickEvents.END_CLIENT_TICK.register(client -> {
 			if (client.currentScreen == null && viewOrderKeyBindingDown.wasPressed()) {
 				orderViewerIndex--;

@@ -4,9 +4,8 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.BoolArgumentType;
 import com.mojang.brigadier.arguments.FloatArgumentType;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
-import mypals.ml.config.ScheduledTickVisualizerModMenuIntegration;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
-import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
@@ -14,17 +13,16 @@ import static mypals.ml.config.ScheduledTickVisualizerConfig.*;
 import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.argument;
 import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.literal;
 
-public class CommandRegister {
-    private static String mod_name = Text.translatable("command.scheduledtickvisualizer.stv.name").getString();
+public class ScheduledTickVisualizerCommandRegister {
+    private static String name = Text.translatable("command.scheduledtickvisualizer.stv.name").getString();
     public static void register(CommandDispatcher<FabricClientCommandSource> dispatcher) {
-
         dispatcher.register(
 
                 literal("scheduledTickVisualizer")
                         .executes(context -> {
                             FabricClientCommandSource source = context.getSource();
 
-                            source.sendFeedback(Text.literal(mod_name).
+                            source.sendFeedback(Text.literal(name).
                                     formatted(Formatting.BOLD).formatted(Formatting.GOLD));
                             source.sendFeedback(Text.literal( Text.translatable("command.scheduledtickvisualizer.render_main").getString() + showInfo).
                                     formatted(getEnabledOrDisabledColor(showInfo)));
@@ -62,7 +60,7 @@ public class CommandRegister {
                                     .executes(context -> {
                                         boolean enable = BoolArgumentType.getBool(context, "enable");
                                         FabricClientCommandSource source = context.getSource();
-                                        source.sendFeedback(Text.literal(mod_name + Text.translatable("command.scheduledtickvisualizer.render_main").getString() + enable).
+                                        source.sendFeedback(Text.literal(name + Text.translatable("command.scheduledtickvisualizer.render_main").getString() + enable).
                                                 formatted(getEnabledOrDisabledColor(enable)));
                                         CommandManager.setStaticBooleanField("showInfo",enable);
                                         return 1;
@@ -74,7 +72,7 @@ public class CommandRegister {
                                         .executes(context -> {
                                             boolean enable = BoolArgumentType.getBool(context, "enable");
                                             FabricClientCommandSource source = context.getSource();
-                                            source.sendFeedback(Text.literal(mod_name + Text.translatable("command.scheduledtickvisualizer.render_box").getString() + enable).
+                                            source.sendFeedback(Text.literal(name + Text.translatable("command.scheduledtickvisualizer.render_box").getString() + enable).
                                                     formatted(getEnabledOrDisabledColor(enable)));
                                             CommandManager.setStaticBooleanField("showInfoBox",enable);
                                             return 1;
@@ -86,7 +84,7 @@ public class CommandRegister {
                                         .executes(context -> {
                                             boolean enable = BoolArgumentType.getBool(context, "enable");
                                             FabricClientCommandSource source = context.getSource();
-                                            source.sendFeedback(Text.literal(mod_name + Text.translatable("command.scheduledtickvisualizer.shadow").getString() + enable).
+                                            source.sendFeedback(Text.literal(name + Text.translatable("command.scheduledtickvisualizer.shadow").getString() + enable).
                                                     formatted(getEnabledOrDisabledColor(enable)));
                                             CommandManager.setStaticBooleanField("shadow",enable);
                                             return 1;
@@ -98,7 +96,7 @@ public class CommandRegister {
                                         .executes(context -> {
                                             boolean enable = BoolArgumentType.getBool(context, "enable");
                                             FabricClientCommandSource source = context.getSource();
-                                            source.sendFeedback(Text.literal(mod_name + Text.translatable("command.scheduledtickvisualizer.background").getString() + enable).
+                                            source.sendFeedback(Text.literal(name + Text.translatable("command.scheduledtickvisualizer.background").getString() + enable).
                                                     formatted(getEnabledOrDisabledColor(enable)));
                                             CommandManager.setStaticBooleanField("background",enable);
                                             return 1;
@@ -110,7 +108,7 @@ public class CommandRegister {
                                         .executes(context -> {
                                             boolean enable = BoolArgumentType.getBool(context, "enable");
                                             FabricClientCommandSource source = context.getSource();
-                                            source.sendFeedback(Text.literal(mod_name + Text.translatable("command.scheduledtickvisualizer.tick_type_accurate").getString() + enable).
+                                            source.sendFeedback(Text.literal(name + Text.translatable("command.scheduledtickvisualizer.tick_type_accurate").getString() + enable).
                                                     formatted(getEnabledOrDisabledColor(enable)));
                                             CommandManager.setStaticBooleanField("showAccurateBlockType",enable);
                                             return 1;
@@ -122,7 +120,7 @@ public class CommandRegister {
                                         .executes(context -> {
                                             boolean enable = BoolArgumentType.getBool(context, "enable");
                                             FabricClientCommandSource source = context.getSource();
-                                            source.sendFeedback(Text.literal(mod_name + Text.translatable("command.scheduledtickvisualizer.tick_type").getString() + enable).
+                                            source.sendFeedback(Text.literal(name + Text.translatable("command.scheduledtickvisualizer.tick_type").getString() + enable).
                                                     formatted(getEnabledOrDisabledColor(enable)));
                                             CommandManager.setStaticBooleanField("showTickTypeInfo",enable);
                                             return 1;
@@ -134,7 +132,7 @@ public class CommandRegister {
                                         .executes(context -> {
                                             boolean enable = BoolArgumentType.getBool(context, "enable");
                                             FabricClientCommandSource source = context.getSource();
-                                            source.sendFeedback(Text.literal(mod_name + Text.translatable("command.scheduledtickvisualizer.order").getString() + enable).
+                                            source.sendFeedback(Text.literal(name + Text.translatable("command.scheduledtickvisualizer.order").getString() + enable).
                                                     formatted(getEnabledOrDisabledColor(enable)));
                                             CommandManager.setStaticBooleanField("showSubOrderInfo",enable);
                                             return 1;
@@ -146,7 +144,7 @@ public class CommandRegister {
                                         .executes(context -> {
                                             boolean enable = BoolArgumentType.getBool(context, "enable");
                                             FabricClientCommandSource source = context.getSource();
-                                            source.sendFeedback(Text.literal(mod_name + Text.translatable("command.scheduledtickvisualizer.sort_order").getString() + enable).
+                                            source.sendFeedback(Text.literal(name + Text.translatable("command.scheduledtickvisualizer.sort_order").getString() + enable).
                                                     formatted(getEnabledOrDisabledColor(enable)));
                                             CommandManager.setStaticBooleanField("sortSubOrderInfo",enable);
                                             return 1;
@@ -158,7 +156,7 @@ public class CommandRegister {
                                         .executes(context -> {
                                             boolean enable = BoolArgumentType.getBool(context, "enable");
                                             FabricClientCommandSource source = context.getSource();
-                                            source.sendFeedback(Text.literal(mod_name + Text.translatable("command.scheduledtickvisualizer.trigger_time").getString() + enable).
+                                            source.sendFeedback(Text.literal(name + Text.translatable("command.scheduledtickvisualizer.trigger_time").getString() + enable).
                                                     formatted(getEnabledOrDisabledColor(enable)));
                                             CommandManager.setStaticBooleanField("showTriggerInfo",enable);
                                             return 1;
@@ -170,7 +168,7 @@ public class CommandRegister {
                                         .executes(context -> {
                                             boolean enable = BoolArgumentType.getBool(context, "enable");
                                             FabricClientCommandSource source = context.getSource();
-                                            source.sendFeedback(Text.literal(mod_name + Text.translatable("command.scheduledtickvisualizer.priority").getString() + enable).
+                                            source.sendFeedback(Text.literal(name + Text.translatable("command.scheduledtickvisualizer.priority").getString() + enable).
                                                     formatted(getEnabledOrDisabledColor(enable)));
                                             CommandManager.setStaticBooleanField("showPriorityInfo",enable);
                                             return 1;
@@ -182,7 +180,7 @@ public class CommandRegister {
                                         .executes(context -> {
                                             float v = FloatArgumentType.getFloat(context, "value");
                                             FabricClientCommandSource source = context.getSource();
-                                            source.sendFeedback(Text.literal(mod_name + Text.translatable("command.scheduledtickvisualizer.text_size").getString() + v).
+                                            source.sendFeedback(Text.literal(name + Text.translatable("command.scheduledtickvisualizer.text_size").getString() + v).
                                                     formatted(getEnabledOrDisabledColor(true)));
                                             CommandManager.setStaticFloatField("textSize",v);
                                             return 1;
@@ -194,7 +192,7 @@ public class CommandRegister {
                                         .executes(context -> {
                                             int v = IntegerArgumentType.getInteger(context, "value");
                                             FabricClientCommandSource source = context.getSource();
-                                            source.sendFeedback(Text.literal(mod_name + Text.translatable("command.scheduledtickvisualizer.time_out_delay").getString() + v).
+                                            source.sendFeedback(Text.literal(name + Text.translatable("command.scheduledtickvisualizer.time_out_delay").getString() + v).
                                                     formatted(getEnabledOrDisabledColor(true)));
                                             CommandManager.setStaticIntField("timeOutDelay",v);
                                             return 1;
