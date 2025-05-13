@@ -14,7 +14,7 @@ import static mypals.ml.config.ScheduledTickVisualizerConfig.*;
 import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.argument;
 import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.literal;
 
-public class CommandRegister {
+public class ScheduledTickVisualizerCommandRegister {
     private static String mod_name = Text.translatable("command.scheduledtickvisualizer.stv.name").getString();
     public static void register(CommandDispatcher<FabricClientCommandSource> dispatcher) {
 
