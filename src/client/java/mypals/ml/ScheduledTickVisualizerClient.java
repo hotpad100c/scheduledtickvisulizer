@@ -1,6 +1,6 @@
 package mypals.ml;
 
-import mypals.ml.command.CommandRegister;
+import mypals.ml.command.ScheduledTickVisualizerCommandRegister;
 import mypals.ml.config.ScheduledTickVisualizerConfig;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
@@ -44,7 +44,7 @@ public class ScheduledTickVisualizerClient implements ClientModInitializer {
 				"category.scheduledTickVisualizer.keys"
 		));
 		ClientCommandRegistrationCallback.EVENT.register((commandDispatcher, commandRegistryAccess) -> {
-			CommandRegister.register(commandDispatcher);
+			ScheduledTickVisualizerCommandRegister.register(commandDispatcher);
 		});
 		ClientTickEvents.END_CLIENT_TICK.register(client -> {
 			if (client.currentScreen == null && viewOrderKeyBindingDown.wasPressed()) {
