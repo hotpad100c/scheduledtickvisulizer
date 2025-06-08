@@ -7,7 +7,6 @@ import it.unimi.dsi.fastutil.longs.Long2LongMaps;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.objects.ObjectIterator;
 import mypals.ml.LogsManager.ScheduledTickVisualizerLogger;
-import mypals.ml.SchedulTickObject;
 import mypals.ml.ScheduledTickVisualizer;
 import net.minecraft.world.tick.ChunkTickScheduler;
 import net.minecraft.world.tick.OrderedTick;
@@ -16,20 +15,9 @@ import net.minecraft.world.tick.WorldTickScheduler;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Queue;
-import java.util.function.BooleanSupplier;
 import java.util.function.LongPredicate;
-import java.util.function.Supplier;
-
-import static mypals.ml.ScheduledTickVisualizer.SCHEDULED_TICK_PACK_RANGE;
-import static mypals.ml.ScheduledTickVisualizer.getPlayersNearBy;
 
 @Mixin(WorldTickScheduler.class)
 public abstract class WorldTickSchedulerMixin<T> implements QueryableTickScheduler<T> {

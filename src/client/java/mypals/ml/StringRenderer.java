@@ -5,7 +5,6 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.render.*;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.util.Colors;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
@@ -14,8 +13,6 @@ import org.joml.Matrix4fStack;
 
 import java.awt.*;
 import java.util.ArrayList;
-
-import static mypals.ml.config.ScheduledTickVisualizerConfig.*;
 
 public class StringRenderer {
     public static double lastTickPosX = 0;

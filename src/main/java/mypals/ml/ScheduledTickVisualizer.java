@@ -10,6 +10,8 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.gamerule.v1.GameRuleFactory;
 import net.fabricmc.fabric.api.gamerule.v1.GameRuleRegistry;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
@@ -30,7 +32,8 @@ public class ScheduledTickVisualizer implements ModInitializer {
 	public static MinecraftServer server = null;
 	//public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 	public static final Identifier TICK_PACKET_ID = Identifier.of(MOD_ID, "tick_data_packet");
-
+	public static final Identifier HELLO_PACKET_ID = Identifier.of(MOD_ID, "hello");
+	public static List<ServerPlayerEntity> players = new ArrayList<>();
 	public static LogManager logManager;
 	public static final GameRules.Key<GameRules.IntRule> SCHEDULED_TICK_PACK_RANGE = GameRuleRegistry.register(
 			"scheduledTickInformationRange",
@@ -44,6 +47,12 @@ public class ScheduledTickVisualizer implements ModInitializer {
 	public void onInitialize() {
 		ServerTickEvents.END_WORLD_TICK.register(this::OnServerTick);
 		ServerLifecycleEvents.SERVER_STARTED.register(s -> server = s);
+		ServerPlayConnectionEvents.DISCONNECT.register((handler, server) -> {
+			players.remove(handler.player);
+		});
+		ServerPlayNetworking.registerGlobalReceiver(HELLO_PACKET_ID, (server, player, handler, buf, responseSender) -> {
+			players.add(player);
+		});
 		CommandRegistrationCallback.EVENT.register((dispatcher, e,registryAccess) -> {
 			dispatcher.register(
 					CommandManager.literal("scheduledTickVisualizerServer")

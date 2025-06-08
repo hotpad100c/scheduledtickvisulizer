@@ -7,6 +7,8 @@ import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallba
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
 import org.lwjgl.glfw.GLFW;
@@ -16,7 +18,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.ArrayList;
-
 import static mypals.ml.config.ScheduledTickVisualizerConfig.sortSubOrderInfo;
 
 public class ScheduledTickVisualizerClient implements ClientModInitializer {
@@ -65,27 +66,31 @@ public class ScheduledTickVisualizerClient implements ClientModInitializer {
 							packetByteBuf.readLong(),
 							packetByteBuf.readString()
 					));
-			if(Objects.equals(type, "Block")){
-				if(sortSubOrderInfo){
-                    ticks.sort(Comparator.comparingLong(t -> t.subTick));
-					for (int i = 0; i < ticks.size(); i++) {
-						ticks.get(i).subTick = i + 1;
+			MinecraftClient.getInstance().execute(()->{
+				if(Objects.equals(type, "Block")){
+					if(sortSubOrderInfo){
+						ticks.sort(Comparator.comparingLong(t -> t.subTick));
+						for (int i = 0; i < ticks.size(); i++) {
+							ticks.get(i).subTick = i + 1;
+						}
+						InfoRender.setScheduledTicksBlock(ticks);
+					}else{
+						InfoRender.setScheduledTicksBlock(ticks);
 					}
-					InfoRender.setScheduledTicksBlock(ticks);
-				}else{
-					InfoRender.setScheduledTicksBlock(ticks);
-				}
-			}else if(Objects.equals(type, "Fluid")){
-				if(sortSubOrderInfo){
-					ticks.sort(Comparator.comparingLong(t -> t.subTick));
-					for (int i = 0; i < ticks.size(); i++) {
-						ticks.get(i).subTick = i + 1;
+				}else if(Objects.equals(type, "Fluid")){
+					if(sortSubOrderInfo){
+						ticks.sort(Comparator.comparingLong(t -> t.subTick));
+						for (int i = 0; i < ticks.size(); i++) {
+							ticks.get(i).subTick = i + 1;
+						}
+						InfoRender.setScheduledTicksFluid(ticks);
+					}else{
+						InfoRender.setScheduledTicksFluid(ticks);
 					}
-					InfoRender.setScheduledTicksFluid(ticks);
-				}else{
-					InfoRender.setScheduledTicksFluid(ticks);
 				}
-			}
+			});
+
+
 		});
 	}
 	public static void UpadteSettings()
