@@ -1,5 +1,6 @@
 package mypals.ml;
 
+import com.mojang.blaze3d.opengl.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
@@ -63,7 +64,7 @@ public class StringRenderer {
 
             TextRenderer textRenderer = MinecraftClient.getInstance().textRenderer;
 
-            RenderSystem.disableDepthTest();
+            GlStateManager._disableDepthTest();
 
             float totalHeight = 0.0F;
             for (String text : texts) {
@@ -84,8 +85,7 @@ public class StringRenderer {
             }
             matrices.pop();
 
-            // 恢复矩阵状态
-            RenderSystem.enableDepthTest();
+            GlStateManager._enableDepthTest();
         }
     }
     public static void drawCube(MatrixStack matrices, BlockPos pos, float size, float tickDelta, Color color,float alpha) {
@@ -103,7 +103,7 @@ public class StringRenderer {
             matrices.translate(x, y, z);
             //matrices.scale(size, size, size);
             Matrix4f modelViewMatrix = matrices.peek().getPositionMatrix();
-            RenderSystem.disableDepthTest();
+            GlStateManager._disableDepthTest();
 
             VertexConsumerProvider.Immediate immediate = getVertexConsumer();
             VertexConsumer vertexConsumer = immediate.getBuffer(RenderLayer.getDebugQuads());
@@ -149,8 +149,7 @@ public class StringRenderer {
             immediate.draw();
             matrices.pop();
 
-            // 恢复矩阵状态
-            RenderSystem.enableDepthTest();
+            GlStateManager._enableDepthTest();
         }
     }
 
@@ -159,7 +158,7 @@ public class StringRenderer {
         Matrix4fStack modelViewMatrix = new Matrix4fStack(1);
         modelViewMatrix.identity();
 
-        float tickDelta = tickCounter.getTickDelta(true);
+        float tickDelta = tickCounter.getDynamicDeltaTicks();
         float x = (float) (textPos.x - MathHelper.lerp(tickDelta, lastTickPosX, camera.getPos().getX()));
         float y = (float) (textPos.y - MathHelper.lerp(tickDelta, lastTickPosY, camera.getPos().getY()));
         float z = (float) (textPos.z - MathHelper.lerp(tickDelta, lastTickPosZ, camera.getPos().getZ()));
@@ -176,7 +175,7 @@ public class StringRenderer {
         float renderX = -totalWidth * 0.5F + writtenWidth;
 
         VertexConsumerProvider.Immediate immediate = MinecraftClient.getInstance().getBufferBuilders().getEntityVertexConsumers();
-        RenderSystem.disableDepthTest();
+        GlStateManager._disableDepthTest();
 
         if(seeThrow)
             textRenderer.draw(text, renderX, 0, color, false, modelViewMatrix
@@ -185,7 +184,7 @@ public class StringRenderer {
             textRenderer.draw(text, renderX, 0, color, false, modelViewMatrix
                     , immediate, TextRenderer.TextLayerType.NORMAL, 0, 0xF000F0);
         immediate.draw();
-        RenderSystem.enableDepthTest();
+        GlStateManager._enableDepthTest();
 
     }
 

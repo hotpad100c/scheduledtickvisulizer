@@ -43,6 +43,11 @@ public class ScheduledTickVisualizer implements ModInitializer {
 			GameRules.Category.MISC,
 			GameRuleFactory.createIntRule(20)
 	);
+	public static final GameRules.Key<GameRules.BooleanRule> SORT_SUBORDER = GameRuleRegistry.register(
+			"scheduledTickOrderSort",
+			GameRules.Category.MISC,
+			GameRuleFactory.createBooleanRule(false)
+	);
 
 	public static Identifier id(String path) {
 		return Identifier.of(MOD_ID, path);

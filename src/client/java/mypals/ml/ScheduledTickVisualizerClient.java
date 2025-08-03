@@ -22,10 +22,10 @@ public class ScheduledTickVisualizerClient implements ClientModInitializer {
 	public static float textSize = 0.012f;
 	private KeyBinding viewOrderKeyBindingUp;
 	private KeyBinding viewOrderKeyBindingDown;
-	private GLFWScrollCallback scrollCallback;
 	public static int orderViewerIndex = 0;
 	private static boolean viewOrderKeyPressed = false;
-
+	private static final Comparator<SchedulTickObject> TICK_COMPARATOR =
+			Comparator.comparingLong(t -> t.subTickOrder);
 
 	@Override
 	public void onInitializeClient() {
@@ -54,31 +54,28 @@ public class ScheduledTickVisualizerClient implements ClientModInitializer {
 				orderViewerIndex++;
 			}
 		});
+
 		ClientPlayNetworking.registerGlobalReceiver(ScheduledTickDataPayload.ID, (payload, context) -> {
-			if(Objects.equals(payload.type(), "Block")){
-				if(sortSubOrderInfo){
-					List<SchedulTickObject> l = payload.ticks();
-					l.sort(Comparator.comparingLong(t -> t.subTickOrder));
-					for (int i = 0; i < l.size(); i++) {
-						l.get(i).subTickOrder = i + 1;
-					}
-					InfoRender.setScheduledTicksBlock(l);
-				}else{
-					InfoRender.setScheduledTicksBlock(payload.ticks());
-				}
-			}else if(Objects.equals(payload.type(), "Fluid")){
-				if(sortSubOrderInfo){
-					List<SchedulTickObject> l = payload.ticks();
-					l.sort(Comparator.comparingLong(t -> t.subTickOrder));
-					for (int i = 0; i < l.size(); i++) {
-						l.get(i).subTickOrder = i + 1;
-					}
-					InfoRender.setScheduledTicksFluid(l);
-				}else{
-					InfoRender.setScheduledTicksFluid(payload.ticks());
-				}
+			List<SchedulTickObject> ticks = payload.ticks();
+			if (sortSubOrderInfo && !isSorted(ticks)) {
+				ticks.sort(TICK_COMPARATOR);
+				int[] index = {1};
+				ticks.forEach(t -> t.subTickOrder = index[0]++);
+			}
+			if (Objects.equals(payload.type(), "Block")) {
+				InfoRender.setScheduledTicksBlock(ticks);
+			} else if (Objects.equals(payload.type(), "Fluid")) {
+				InfoRender.setScheduledTicksFluid(ticks);
 			}
 		});
+	}
+	private static boolean isSorted(List<SchedulTickObject> ticks) {
+		for (int i = 1; i < ticks.size(); i++) {
+			if (ticks.get(i - 1).subTickOrder > ticks.get(i).subTickOrder) {
+				return false;
+			}
+		}
+		return true;
 	}
 	public static void UpadteSettings()
 	{

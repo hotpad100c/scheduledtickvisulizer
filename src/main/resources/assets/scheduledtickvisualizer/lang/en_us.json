@@ -5,11 +5,15 @@
   "text.scheduledtick.trigger": "Trigger",
   "text.scheduledtick.priority": "Priority",
   "gamerule.scheduledTickInformationRange": "The range for providing scheduled tick information to nearby players",
+  "gamerule.scheduledTickOrderSort": "Scheduled Tick Order Sorting",
+
 
   "config.scheduledtickvisualizer.title": "ScheduledTickVisualizerConfig",
   "config.scheduledtickvisualizer.settings": "Settings",
   "config.scheduledtickvisualizer.settings.tooltip": "settings...",
   "config.scheduledtickvisualizer.render": "Render",
+  "config.scheduledtickvisualizer.orderIndicator": "Order Indicator",
+  "config.scheduledtickvisualizer.orderIndicator.description": "Render a white box on next scheduled tick position, controlled by up down arrow key by default.",
   "config.scheduledtickvisualizer.render.description": "render settings",
   "config.scheduledtickvisualizer.main_render": "Main Render",
   "config.scheduledtickvisualizer.main_render.description": "Enable to see all the scheduled tick information.",
@@ -60,6 +64,7 @@
   "command.scheduledtickvisualizer.priority": "Render priority -> ",
   "command.scheduledtickvisualizer.text_size": "Text size -> ",
   "command.scheduledtickvisualizer.time_out_delay": "Time out delay -> ",
+  "command.scheduledtickvisualizer.orderIndicator": "Order Indicator -> ",
 
   "key.scheduledTickVisualizer.keys": "ScheduledTickVisualizer",
   "key.scheduledTickVisualizer.up": "ExecutionSimulate(Forward)",

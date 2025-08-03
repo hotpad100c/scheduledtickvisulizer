@@ -5,7 +5,10 @@
   "text.scheduledtick.trigger": "触发",
   "text.scheduledtick.priority": "优先级",
   "gamerule.scheduledTickInformationRange": "为附近的玩家提供计划刻信息的范围",
+  "gamerule.scheduledTickOrderSort": "计划刻子顺序整理",
 
+  "config.scheduledtickvisualizer.orderIndicator": "顺序指示器",
+  "config.scheduledtickvisualizer.orderIndicator.description": "在下一个计划刻的位置渲染一个白色方框，默认由上下箭头键控制。",
   "config.scheduledtickvisualizer.title": "计划刻可视化配置",
   "config.scheduledtickvisualizer.settings": "设置",
   "config.scheduledtickvisualizer.settings.tooltip": "设置...",
@@ -58,6 +61,7 @@
   "command.scheduledtickvisualizer.priority": "渲染优先级 -> ",
   "command.scheduledtickvisualizer.text_size": "文字大小 -> ",
   "command.scheduledtickvisualizer.time_out_delay": "超时时间 -> ",
+  "command.scheduledtickvisualizer.orderIndicator": "顺序指示器 -> ",
   "key.scheduledTickVisualizer.keys": "ScheduledTickVisualizer",
   "key.scheduledTickVisualizer.up": "执行模拟（前进）",
   "key.scheduledTickVisualizer.down": "执行模拟（后退）"

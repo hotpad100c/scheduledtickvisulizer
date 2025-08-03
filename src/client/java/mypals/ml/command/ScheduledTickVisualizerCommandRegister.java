@@ -80,6 +80,17 @@ public class ScheduledTickVisualizerCommandRegister {
                                             return 1;
                                         })
                                 )
+                        ).then(literal("orderIndicator")
+                                .then(argument("enable", BoolArgumentType.bool())
+                                        .executes(context -> {
+                                            boolean enable = BoolArgumentType.getBool(context, "enable");
+                                            FabricClientCommandSource source = context.getSource();
+                                            source.sendFeedback(Text.literal(mod_name + Text.translatable("command.scheduledtickvisualizer.orderIndicator").getString() + enable).
+                                                    formatted(getEnabledOrDisabledColor(enable)));
+                                            CommandManager.setStaticBooleanField("orderIndicator",enable);
+                                            return 1;
+                                        })
+                                )
                         )
                         .then(literal("enableTextShadow")
                                 .then(argument("enable", BoolArgumentType.bool())

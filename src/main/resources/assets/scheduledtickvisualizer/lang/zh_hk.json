@@ -5,7 +5,10 @@
   "text.scheduledtick.trigger": "觸發",
   "text.scheduledtick.priority": "優先級",
   "gamerule.scheduledTickInformationRange": "為附近的玩家提供計劃刻資訊的範圍",
+  "gamerule.scheduledTickOrderSort": "计划刻子顺序整理",
 
+  "config.scheduledtickvisualizer.orderIndicator": "顺序指示器",
+  "config.scheduledtickvisualizer.orderIndicator.description": "在下一个计划刻的位置渲染一个白色方框，默认由上下箭头键控制。",
   "config.scheduledtickvisualizer.title": "計劃刻可視化設定",
   "config.scheduledtickvisualizer.settings": "設定",
   "config.scheduledtickvisualizer.settings.tooltip": "設定...",

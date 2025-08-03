@@ -21,7 +21,7 @@ import java.util.function.LongPredicate;
 @Mixin(WorldTickScheduler.class)
 public abstract class WorldTickSchedulerMixin<T> implements QueryableTickScheduler<T> {
 
-    @Shadow @Final public Long2ObjectMap<ChunkTickScheduler<T>> chunkTickSchedulers;
+    /*@Shadow @Final public Long2ObjectMap<ChunkTickScheduler<T>> chunkTickSchedulers;
 
     @Shadow @Final private Long2LongMap nextTriggerTickByChunkPos;
 
@@ -162,6 +162,6 @@ public abstract class WorldTickSchedulerMixin<T> implements QueryableTickSchedul
             ScheduledTickVisualizerLogger.writeLogFile(ScheduledTickVisualizer.logManager.fileName,
                     "|   L_WorldTickScheduler:Finished collecting tickable ChunkTickSchedulers.");
         }
-    }
+    }*/
 
 }

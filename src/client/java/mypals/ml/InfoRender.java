@@ -34,7 +34,7 @@ public class InfoRender {
     @SuppressWarnings("ConstantConditions")
     public static void render(MatrixStack matrixStack) {
         if(showInfo) {
-            if (!reorderedBlockTicks.isEmpty() || !reorderedFluidTicks.isEmpty()) {
+            if ((!reorderedBlockTicks.isEmpty() || !reorderedFluidTicks.isEmpty()) && orderIndicator) {
                 int totalSize = reorderedBlockTicks.size() + reorderedFluidTicks.size();
 
                 if (ScheduledTickVisualizerClient.orderViewerIndex < 0 || ScheduledTickVisualizerClient.orderViewerIndex >= totalSize) {
@@ -48,7 +48,6 @@ public class InfoRender {
                     int fluidIndex = ScheduledTickVisualizerClient.orderViewerIndex - reorderedBlockTicks.size();
                     pos = reorderedFluidTicks.get(fluidIndex);
                 }
-
                 drawCube(matrixStack, pos, 0.01f, 0,
                         new Color(225, 225, 225), boxAlpha);
             }

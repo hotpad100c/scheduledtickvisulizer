@@ -9,12 +9,14 @@ import java.util.Comparator;
 import java.util.List;
 
 public class TickOrderResolver {
+    private static final Comparator<SchedulTickObject> SCHEDUL_TICK_COMPARATOR =
+            Comparator.comparingLong((SchedulTickObject d) -> d.triggerTick)
+                    .thenComparingInt(d -> d.priority)
+                    .thenComparingLong(d -> d.subTickOrder);
     public static List<BlockPos> resolveTickOrder(List<SchedulTickObject> scheduledTicks) {
 
-        scheduledTicks.sort(Comparator
-                .comparingLong((SchedulTickObject d) -> d.triggerTick)
-                .thenComparingInt(d -> d.priority)
-                .thenComparingLong(d -> d.subTickOrder)
+        scheduledTicks.sort(
+                SCHEDUL_TICK_COMPARATOR
         );
         List<BlockPos> ordered= new ArrayList<>();
         for (SchedulTickObject tick : scheduledTicks) {

@@ -5,6 +5,9 @@
   "text.scheduledtick.trigger": "トリガー",
   "text.scheduledtick.priority": "優先度",
   "gamerule.scheduledTickInformationRange": "近くのプレイヤーにスケジュールされたティック情報を提供する範囲",
+  "gamerule.scheduledTickOrderSort": "スケジュールされたティックの順序整理",
+  "config.scheduledtickvisualizer.orderIndicator": "順序インジケーター",
+  "config.scheduledtickvisualizer.orderIndicator.description": "次のスケジュールされたティックの位置に白いボックスを表示します。デフォルトでは上下の矢印キーで制御されます。",
 
   "config.scheduledtickvisualizer.title": "ScheduledTickVisualizer設定",
   "config.scheduledtickvisualizer.settings": "設定",
@@ -57,5 +60,6 @@
   "command.scheduledtickvisualizer.trigger_time": "トリガー時間をレンダリング -> ",
   "command.scheduledtickvisualizer.priority": "優先度をレンダリング -> ",
   "command.scheduledtickvisualizer.text_size": "テキストサイズ -> ",
-  "command.scheduledtickvisualizer.time_out_delay": "タイムアウト時間 -> "
+  "command.scheduledtickvisualizer.time_out_delay": "タイムアウト時間 -> ",
+    "command.scheduledtickvisualizer.orderIndicator": "順序インジケーター -> "
 }

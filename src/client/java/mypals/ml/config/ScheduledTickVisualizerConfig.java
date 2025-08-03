@@ -45,6 +45,8 @@ public class ScheduledTickVisualizerConfig {
     @SerialEntry
     public static int timeOutDelay = 30;
     @SerialEntry
+    public static boolean orderIndicator = false;
+    @SerialEntry
     public static Color blockTickColor = Color.magenta;
 
     @SerialEntry
